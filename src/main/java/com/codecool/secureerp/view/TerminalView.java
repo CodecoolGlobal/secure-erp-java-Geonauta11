@@ -31,7 +31,27 @@ public class TerminalView {
      * @param options array of all available options in menu as Strings
      */
     public void printMenu(String title, String[] options) {
-        throw new RuntimeException("Not implemented yet");
+//        System.out.println(title);
+//        String s = "";
+//        for (int i = options.length - 1; i >= 0; i--) {
+//            if(i == 0) {
+//                s += "(" + i +") " + options[i];
+//            } else {
+//                s = "(" + i +") "  + options[i] + "\n" + s;
+//            }
+//        }
+//        System.out.println(s);
+
+        System.out.println(title);
+        StringBuilder s = new StringBuilder();
+        for (int i = options.length - 1; i >= 0; i--) {
+            if(i == 0) {
+                s.append("(").append(i).append(") ").append(options[i]);
+            } else {
+                s.insert(0, "(" + i + ") " + options[i] + "\n");
+            }
+        }
+        System.out.println(s);
     }
 
     /**
@@ -41,7 +61,7 @@ public class TerminalView {
      * @param label  label String
      */
     public void printGeneralResults(String result, String label) {
-        throw new RuntimeException("Not implemented yet");
+        System.out.println(label + ": " + result);
     }
 
     /*
@@ -57,10 +77,15 @@ public class TerminalView {
     /**
      * Prints tabular data like above example
      *
-     * @param table 2 dimensional array to be printed as table
+     * @param table 2-dimensional array to be printed as table
      */
     public void printTable(String[][] table) {
-        throw new RuntimeException("Not implemented yet");
+        for(String[] row : table) {
+            for(String cell : row) {
+                System.out.print("|" + cell + " ");
+            }
+            System.out.println("|");
+        }
     }
 
     /**
@@ -70,7 +95,8 @@ public class TerminalView {
      * @return user input as String
      */
     public String getInput(String label) {
-        throw new RuntimeException("Not implemented yet");
+        System.out.println(label + ":");
+        return scanner.nextLine();
     }
 
 
@@ -81,7 +107,13 @@ public class TerminalView {
      * @return array of user inputs
      */
     public String[] getInputs(String[] labels) {
-        throw new RuntimeException("Not implemented yet");
+        String[] inputs = new String[labels.length];
+
+        for(int i = 0; i < labels.length; i++) {
+            inputs[i] = getInput(labels[i]);
+        }
+
+        return inputs;
     }
 
     /**
@@ -90,6 +122,6 @@ public class TerminalView {
      * @param message String with error details
      */
     public void printErrorMessage(String message) {
-        throw new RuntimeException("Not implemented yet");
+        System.err.println("Error: " + message);
     }
 }
