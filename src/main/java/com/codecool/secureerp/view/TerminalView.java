@@ -16,7 +16,7 @@ public class TerminalView {
      * @param message information to be printed
      */
     public void printMessage(String message) {
-        throw new RuntimeException("Not implemented yet");
+        System.out.println(message);
     }
 
     /**
