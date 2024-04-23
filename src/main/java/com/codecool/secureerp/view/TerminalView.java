@@ -1,5 +1,7 @@
 package com.codecool.secureerp.view;
 
+import de.vandermeer.asciitable.AsciiTable;
+
 import java.util.Scanner;
 
 public class TerminalView {
@@ -19,6 +21,7 @@ public class TerminalView {
         System.out.println(message);
     }
 
+
     /**
      * Prints options in standard menu format like this:
      * Main Menu:
@@ -31,17 +34,6 @@ public class TerminalView {
      * @param options array of all available options in menu as Strings
      */
     public void printMenu(String title, String[] options) {
-//        System.out.println(title);
-//        String s = "";
-//        for (int i = options.length - 1; i >= 0; i--) {
-//            if(i == 0) {
-//                s += "(" + i +") " + options[i];
-//            } else {
-//                s = "(" + i +") "  + options[i] + "\n" + s;
-//            }
-//        }
-//        System.out.println(s);
-
         System.out.println(title);
         StringBuilder s = new StringBuilder();
         for (int i = options.length - 1; i >= 0; i--) {
@@ -80,12 +72,22 @@ public class TerminalView {
      * @param table 2-dimensional array to be printed as table
      */
     public void printTable(String[][] table) {
-        for(String[] row : table) {
-            for(String cell : row) {
-                System.out.print("|" + cell + " ");
-            }
-            System.out.println("|");
+//        for(String[] row : table) {
+//            for(String cell : row) {
+//                System.out.print("|" + cell + " ");
+//            }
+//            System.out.println("|");
+//        }
+
+        AsciiTable asciiTable = new AsciiTable();
+        asciiTable.addRule();
+
+        for (int i = 0; i < table.length; i++) {
+            asciiTable.addRow(table[i]);
+            asciiTable.addRule();
         }
+        printMessage(asciiTable.render());
+
     }
 
     /**
