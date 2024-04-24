@@ -21,7 +21,6 @@ public class CRMController {
         this.terminalView = terminalView;
         dao = new CRMDAO();
         dao.load();
-
     }
     public void tearDown() throws IOException{
         dao.save();
