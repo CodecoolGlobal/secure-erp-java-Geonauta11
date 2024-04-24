@@ -72,13 +72,6 @@ public class TerminalView {
      * @param table 2-dimensional array to be printed as table
      */
     public void printTable(String[][] table) {
-//        for(String[] row : table) {
-//            for(String cell : row) {
-//                System.out.print("|" + cell + " ");
-//            }
-//            System.out.println("|");
-//        }
-
         AsciiTable asciiTable = new AsciiTable();
         asciiTable.addRule();
 
