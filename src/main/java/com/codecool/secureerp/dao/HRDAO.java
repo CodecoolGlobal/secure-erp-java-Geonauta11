@@ -8,4 +8,6 @@ public class HRDAO {
     private final static int CLEARANCE_TABLE_INDEX = 4;
     private final static String DATA_FILE = "src/main/resources/hr.csv";
     public static String[] headers = {"Id", "Name", "Date of birth", "Department", "Clearance"};
+
+
 }
