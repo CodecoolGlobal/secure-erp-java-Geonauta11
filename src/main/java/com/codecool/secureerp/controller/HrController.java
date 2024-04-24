@@ -2,7 +2,7 @@ package com.codecool.secureerp.controller;
 
 import com.codecool.secureerp.view.TerminalView;
 
-public class HRController {
+public class HrController {
     public static final String[] OPTIONS = new String[]{
             "Back to main menu",
             "List employees",
@@ -17,7 +17,7 @@ public class HRController {
     };
     private final TerminalView terminalView;
 
-    public HRController(TerminalView terminalView) {
+    public HrController(TerminalView terminalView) {
         this.terminalView = terminalView;
     }
 
