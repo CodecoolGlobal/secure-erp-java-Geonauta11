@@ -7,19 +7,22 @@ import com.codecool.secureerp.controller.MainController;
 import com.codecool.secureerp.controller.SalesController;
 import com.codecool.secureerp.view.TerminalView;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class App {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         Scanner scanner = new Scanner(System.in);
         TerminalView terminalView = new TerminalView(scanner);
         CRMController crmController = new CRMController(terminalView);
         SalesController salesController = new SalesController(terminalView);
         HRController hrController = new HRController(terminalView);
-
         MainController mainController = new MainController(crmController, salesController, hrController, terminalView);
-
-        mainController.menu();
+        try {
+            mainController.menu();
+        } finally {
+            mainController.tearDown();
+        }
     }
 }

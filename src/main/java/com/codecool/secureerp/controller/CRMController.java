@@ -15,19 +15,21 @@ public class CRMController {
             "Subscribed customer emails"
     };
     private final TerminalView terminalView;
-    private final CRMDAO dao = new CRMDAO();
+    private final CRMDAO dao;
 
-    public CRMController(TerminalView terminalView) {
+    public CRMController(TerminalView terminalView) throws IOException{
         this.terminalView = terminalView;
+        dao = new CRMDAO();
+        dao.load();
+
+    }
+    public void tearDown() throws IOException{
+        dao.save();
     }
 
     public void displayMenu() {
         terminalView.printMenu("Customer Relationship", OPTIONS);
         terminalView.getInput("Please select one of the following options:");
-        try {
-            terminalView.printTable(dao.read());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        terminalView.printTable(dao.getDataAsTable());
     }
 }

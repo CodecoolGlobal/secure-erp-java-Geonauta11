@@ -2,6 +2,8 @@ package com.codecool.secureerp.controller;
 
 import com.codecool.secureerp.view.TerminalView;
 
+import java.io.IOException;
+
 public class MainController {
     public static final String[] OPTIONS = new String[]{
             "Exit program",
@@ -19,6 +21,14 @@ public class MainController {
         this.salesController = salesController;
         this.hrController = hrController;
         this.terminalView = terminalView;
+    }
+
+    public void tearDown() {
+        try {
+            crmController.tearDown();
+        } catch (IOException ignored) {}
+//        salesController.tearDown();
+//        hrController.tearDown();
     }
 
     public void menu() {
