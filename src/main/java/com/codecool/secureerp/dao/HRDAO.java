@@ -6,8 +6,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class HRDAO {
@@ -36,7 +41,7 @@ public class HRDAO {
         return arrayToCustomer(csvRowToArray(row));
     }
     private static String[] customerToArray(HRModel customer) {
-        String[] csvArray = new String[4];
+        String[] csvArray = new String[5];
         csvArray[ID_TABLE_INDEX] = Integer.toString(customer.getId());
         csvArray[NAME_TABLE_INDEX] = customer.getName();
         csvArray[BIRTH_DATE_TABLE_INDEX] = customer.getBirthDate();
@@ -72,6 +77,7 @@ public class HRDAO {
         }
     }
 
+    // Return the name of the youngest employee
     public String getYoungestEmployeeName() {
         HRModel youngestEmployee = hrEmployees.get(0);
         for (HRModel hrEmployee : hrEmployees) {
@@ -83,6 +89,7 @@ public class HRDAO {
         return youngestEmployee.getName();
     }
 
+    // Return the name of the oldest employee
     public String getOldestEmployeeName() {
         HRModel oldestEmployee = hrEmployees.get(0);
         for (HRModel hrEmployee : hrEmployees) {
@@ -94,6 +101,7 @@ public class HRDAO {
         return oldestEmployee.getName();
     }
 
+    // Return the average age of HR employees
     public int getAverageAgeOfEmployees() {
         int agesSum = 0;
         int length = hrEmployees.size();
@@ -105,5 +113,47 @@ public class HRDAO {
         }
 
         return agesSum / length;
+    }
+
+    // Return the name of employees who have birthdays within two weeks from the input date
+    public List<String> getEmployeesWithBirthdaysWithinTwoWeeks(String inputDate) {
+        List<String> employeesWithBirthdaysWithinTwoWeeks = new ArrayList<>();
+
+        LocalDate startDate = LocalDate.parse(inputDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endDate = startDate.plusDays(14);
+
+        for(HRModel hrEmployee : hrEmployees) {
+            LocalDate employeeBirthDate = LocalDate.parse(hrEmployee.getBirthDate());
+            if (employeeBirthDate.isAfter(startDate.minusDays(1)) && employeeBirthDate.isBefore(endDate.plusDays(1))) {
+                employeesWithBirthdaysWithinTwoWeeks.add(hrEmployee.getName());
+            }
+        }
+
+        return employeesWithBirthdaysWithinTwoWeeks;
+    }
+
+    // Return the number of employees who have at least the input clearance level
+    public int getEmployeesWithMinimumClearanceLevel(int minimumClearanceLevel) {
+        int employeesWithMinimumClearanceLevel = 0;
+
+        for (HRModel hrEmployee : hrEmployees) {
+            if(hrEmployee.getClearance() >= minimumClearanceLevel) {
+                employeesWithMinimumClearanceLevel++;
+            }
+        }
+
+        return employeesWithMinimumClearanceLevel;
+    }
+
+    // Return the number of employees per department in a Map
+    public Map<String, Integer> getEmployeesCountByDepartment() {
+        Map<String, Integer> departmentCountMap = new HashMap<>();
+
+        for (HRModel hrEmployee : hrEmployees) {
+            String department = hrEmployee.getDepartment();
+            departmentCountMap.put(department, departmentCountMap.getOrDefault(department, 0) + 1);
+        }
+
+        return departmentCountMap;
     }
 }
