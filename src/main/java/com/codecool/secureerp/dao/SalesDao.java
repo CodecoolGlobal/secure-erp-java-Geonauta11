@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SalesDao {
-
     private final static int ID_TABLE_INDEX = 0;
     private final static int CUSTOMER_ID_TABLE_INDEX = 1;
     private final static int PRODUCT_TABLE_INDEX = 2;
