@@ -14,99 +14,110 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class HrDao {
+public class HrDao extends Dao<HrModel> {
     private final static int ID_TABLE_INDEX = 0;
     private final static int NAME_TABLE_INDEX = 1;
     private final static int BIRTH_DATE_TABLE_INDEX = 2;
     private final static int DEPARTMENT_TABLE_INDEX = 3;
     private final static int CLEARANCE_TABLE_INDEX = 4;
     private final static String DATA_FILE = "src/main/resources/hr.csv";
-    public static String[] headers = {"Id", "Name", "Date of birth", "Department", "Clearance"};
+    public static String[] DEFAULT_HEADERS = {"Id", "Name", "Date of birth", "Department", "Clearance"};
 
-    private List<HrModel> hrEmployees;
-
-    private static String[] csvRowToArray(String row) {
-        return row.split(";");
+    public HrDao() {
+        super(DEFAULT_HEADERS);
     }
-    private static HrModel arrayToCustomer(String[] array) {
-        int id = Integer.parseInt(array[ID_TABLE_INDEX]);
+
+    @Override
+    protected HrModel arrayToModel(String[] array) {
+        String id = array[ID_TABLE_INDEX];
         String name = array[NAME_TABLE_INDEX];
         String birthDate = array[BIRTH_DATE_TABLE_INDEX];
         String department = array[DEPARTMENT_TABLE_INDEX];
         int clearance = Integer.parseInt(array[CLEARANCE_TABLE_INDEX]);
         return new HrModel(id, name, birthDate, department, clearance);
     }
-    private static HrModel csvRowToCustomer(String row) {
-        return arrayToCustomer(csvRowToArray(row));
-    }
-    private static String[] customerToArray(HrModel customer) {
+
+    @Override
+    protected String[] modelToArray(HrModel customer) {
         String[] csvArray = new String[5];
-        csvArray[ID_TABLE_INDEX] = Integer.toString(customer.getId());
+        csvArray[ID_TABLE_INDEX] = customer.getId();
         csvArray[NAME_TABLE_INDEX] = customer.getName();
         csvArray[BIRTH_DATE_TABLE_INDEX] = customer.getBirthDate();
         csvArray[DEPARTMENT_TABLE_INDEX] = customer.getDepartment();
         csvArray[CLEARANCE_TABLE_INDEX] = Integer.toString(customer.getClearance());
         return csvArray;
     }
-    private static String arrayToCsvRow(String[] array) {
-        return String.join(";", array);
-    }
-    private static String customerToCsvRow(HrModel customer) {
-        return arrayToCsvRow(customerToArray(customer));
-    }
 
+    @Override
     public void load() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(DATA_FILE));
-        hrEmployees = reader.lines()
-                .map(HrDao::csvRowToCustomer)
-                .toList();
+        super.load(DATA_FILE);
     }
 
-    private String getDataAsCsv() {
-        return hrEmployees.stream().map(HrDao::customerToCsvRow)
-                .collect(Collectors.joining("\n"));
-    }
-
-    public String[][] getDataAsTable() {
-        return hrEmployees.stream().map(HrDao::customerToArray).toArray(String[][]::new);
-    }
+    @Override
     public void save() throws IOException {
-        try (FileWriter fileWriter = new FileWriter(DATA_FILE)) {
-            fileWriter.write(getDataAsCsv());
-        }
+        super.save(DATA_FILE);
     }
 
-    // Return the name of the youngest employee
+    public void addEmployee(HrModel employee) {
+        data.add(employee);
+    }
+
+    public boolean updateEmployee(HrModel employee) {
+        int index = findEmployeeIndexById(employee.getId());
+        if (index == -1) {
+            return false;
+        }
+        data.set(index, employee);
+        return true;
+    }
+
+    private int findEmployeeIndexById(String id) {
+        for(int i = 0; i < data.size(); i++) {
+            HrModel employee = data.get(i);
+            if(id.equals(employee.getId())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public boolean deleteEmployeeById(String id) {
+         int index = findEmployeeIndexById(id);
+         if(index == -1) {
+             return false;
+         }
+         data.remove(index);
+         return true;
+    }
+
     public String getYoungestEmployeeName() {
-        HrModel youngestEmployee = hrEmployees.get(0);
-        for (HrModel hrEmployee : hrEmployees) {
+        HrModel youngestEmployee = data.get(0);
+        for (HrModel hrEmployee : data) {
             String currentEmployeeBirthDate = hrEmployee.getBirthDate();
-            if(youngestEmployee.getBirthDate().compareTo(currentEmployeeBirthDate) > 0) {
+            if(youngestEmployee.getBirthDate().compareTo(currentEmployeeBirthDate) < 0) {
                 youngestEmployee = hrEmployee;
             }
         }
         return youngestEmployee.getName();
     }
 
-    // Return the name of the oldest employee
     public String getOldestEmployeeName() {
-        HrModel oldestEmployee = hrEmployees.get(0);
-        for (HrModel hrEmployee : hrEmployees) {
+        HrModel oldestEmployee = data.get(0);
+        for (HrModel hrEmployee : data) {
             String currentEmployeeBirthDate = hrEmployee.getBirthDate();
-            if(oldestEmployee.getBirthDate().compareTo(currentEmployeeBirthDate) < 0) {
+            if(oldestEmployee.getBirthDate().compareTo(currentEmployeeBirthDate) > 0) {
                 oldestEmployee = hrEmployee;
             }
         }
         return oldestEmployee.getName();
     }
 
-    // Return the average age of HR employees
     public int getAverageAgeOfEmployees() {
         int agesSum = 0;
-        int length = hrEmployees.size();
+        int length = data.size();
         int currentYear = Year.now().getValue();
 
-        for (HrModel hrEmployee : hrEmployees) {
+        for (HrModel hrEmployee : data) {
             int employeeBirthYear = Integer.parseInt(hrEmployee.getBirthDate().split("-")[0]);
             agesSum += currentYear - employeeBirthYear;
         }
@@ -114,14 +125,13 @@ public class HrDao {
         return agesSum / length;
     }
 
-    // Return the name of employees who have birthdays within two weeks from the input date
     public List<String> getEmployeesWithBirthdaysWithinTwoWeeks(String inputDate) {
         List<String> employeesWithBirthdaysWithinTwoWeeks = new ArrayList<>();
 
         LocalDate startDate = LocalDate.parse(inputDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDate endDate = startDate.plusDays(14);
 
-        for(HrModel hrEmployee : hrEmployees) {
+        for(HrModel hrEmployee : data) {
             LocalDate employeeBirthDate = LocalDate.parse(hrEmployee.getBirthDate());
             if (employeeBirthDate.isAfter(startDate.minusDays(1)) && employeeBirthDate.isBefore(endDate.plusDays(1))) {
                 employeesWithBirthdaysWithinTwoWeeks.add(hrEmployee.getName());
@@ -131,11 +141,10 @@ public class HrDao {
         return employeesWithBirthdaysWithinTwoWeeks;
     }
 
-    // Return the number of employees who have at least the input clearance level
     public int getEmployeesWithMinimumClearanceLevel(int minimumClearanceLevel) {
         int employeesWithMinimumClearanceLevel = 0;
 
-        for (HrModel hrEmployee : hrEmployees) {
+        for (HrModel hrEmployee : data) {
             if(hrEmployee.getClearance() >= minimumClearanceLevel) {
                 employeesWithMinimumClearanceLevel++;
             }
@@ -144,11 +153,10 @@ public class HrDao {
         return employeesWithMinimumClearanceLevel;
     }
 
-    // Return the number of employees per department in a Map
     public Map<String, Integer> getEmployeesCountByDepartment() {
         Map<String, Integer> departmentCountMap = new HashMap<>();
 
-        for (HrModel hrEmployee : hrEmployees) {
+        for (HrModel hrEmployee : data) {
             String department = hrEmployee.getDepartment();
             departmentCountMap.put(department, departmentCountMap.getOrDefault(department, 0) + 1);
         }
@@ -156,25 +164,21 @@ public class HrDao {
         return departmentCountMap;
     }
 
-    // Validate year
     public boolean validateYearInput(String yearInput) {
         String validYearPattern = "^(19|20)[0-9][0-9]$";
         return yearInput.matches(validYearPattern);
     }
 
-    // Validate month
     public boolean validateMonthInput(String monthInput) {
         String validMonthPattern = "^(0?[1-9]|1[012])$";
         return monthInput.matches(validMonthPattern);
     }
 
-    // Validate day
     public boolean validateDayInput(String dayInput) {
         String validDayInput = "^(0?[1-9]|[12][0-9]|3[01])$";
         return dayInput.matches(validDayInput);
     }
 
-    // Validate year
     public boolean validateDateInput(String dateInput) {
         String validDatePattern = "^((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$";
         return dateInput.matches(validDatePattern);
