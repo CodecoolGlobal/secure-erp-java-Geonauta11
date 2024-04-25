@@ -1,11 +1,8 @@
 package com.codecool.secureerp.dao;
 
 import com.codecool.secureerp.model.CrmModel;
-import com.codecool.secureerp.model.Model;
 
 import java.io.*;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CrmDao extends Dao<CrmModel>{
     private final static int ID_TABLE_INDEX = 0;
@@ -13,8 +10,12 @@ public class CrmDao extends Dao<CrmModel>{
     private final static int EMAIL_TABLE_INDEX = 2;
     private final static int SUBSCRIBED_TABLE_INDEX = 3;
     private final static String DATA_FILE = "src/main/resources/crm.csv";
-    public static String[] headers = {"Id", "Name", "Email", "Subscribed"};
+    private final static String[] headers = {"Id", "Name", "Email", "Subscribed"};
 
+    @Override
+    public String[] getHeaders() {
+        return headers;
+    }
 
     @Override
     protected CrmModel arrayToModel(String[] array) {

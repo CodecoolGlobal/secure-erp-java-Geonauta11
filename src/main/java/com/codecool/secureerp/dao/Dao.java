@@ -27,12 +27,12 @@ public abstract class Dao<T extends Model> {
             .collect(Collectors.joining("\n"));
     }
 
-    public String[][] getDataAsTable() {
-        System.out.println(data.toString());
-        String[][] table = data.stream().map(this::modelToArray).toArray(String[][]::new);
-        System.out.println(Arrays.deepToString(table));
+    protected abstract String[] getHeaders();
 
-        return table;
+    public String[][] getDataAsTable() {
+        List<String[]> table = data.stream().map(this::modelToArray).collect(Collectors.toList());
+        table.add(0, getHeaders());
+        return table.toArray(new String[0][]);
     }
     public void load(String DATA_FILE) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(DATA_FILE));

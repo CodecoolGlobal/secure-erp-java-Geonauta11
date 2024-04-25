@@ -72,29 +72,25 @@ public class CrmController implements Closeable {
         }
     }
     private CrmModel promptCustomer(boolean checkNoDuplicateId) {
-        String id;
-        do {
-            id = terminalView.getInput("Id: ");
-            if (!checkNoDuplicateId || !dao.hasId(id)) break;
-            terminalView.printErrorMessage("id already exists");
-        } while (true);
+        String id = promptId();
         String name = terminalView.getInput("Name: ");
         String email = terminalView.getInput("Email: ");
-        boolean isSubscribed;
+        boolean isSubscribed = promptIsSubscribed();
+        return new CrmModel(id, name, email, isSubscribed);
+    }
+    private boolean promptIsSubscribed() {
+        String isSubscribedString;
         do  {
-            String isSubscribedString = terminalView.getInput("Subscribed (Yes/No): ");
+            isSubscribedString = terminalView.getInput("Subscribed (Yes/No): ");
             if (isSubscribedString.equalsIgnoreCase("yes") ||
                 isSubscribedString.equalsIgnoreCase("y")) {
-                isSubscribed = true;
-                break;
+                return true;
             } else if (isSubscribedString.equalsIgnoreCase("no") ||
                 isSubscribedString.equalsIgnoreCase("n")) {
-                isSubscribed = false;
-                break;
+                return false;
             }
             terminalView.printMessage("invalid input");
         } while (true);
-        return new CrmModel(id, name, email, isSubscribed);
     }
     private void deleteCustomer() {
         String id = promptId();
