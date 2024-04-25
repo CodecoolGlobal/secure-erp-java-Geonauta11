@@ -8,12 +8,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Dao<T extends Model> {
     protected List<T> data = new ArrayList<>();
+    protected String[] headers;
+
+    public Dao(String[] headers) {
+        this.headers = headers;
+    }
 
     protected String arrayToCsvRow(String[] array) {
         return String.join(";", array);
@@ -27,7 +31,9 @@ public abstract class Dao<T extends Model> {
             .collect(Collectors.joining("\n"));
     }
 
-    protected abstract String[] getHeaders();
+    protected String[] getHeaders() {
+        return headers;
+    }
 
     public String[][] getDataAsTable() {
         List<String[]> table = data.stream().map(this::modelToArray).collect(Collectors.toList());
@@ -56,6 +62,9 @@ public abstract class Dao<T extends Model> {
     protected String[] csvRowToArray(String row) {
         return row.split(";");
     }
+
+    public abstract void load() throws IOException;
+    public abstract void save() throws IOException;
     protected abstract T arrayToModel(String[] array);
     protected abstract String[] modelToArray(T customer);
 }

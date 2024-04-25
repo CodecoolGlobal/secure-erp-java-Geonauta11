@@ -6,7 +6,6 @@ import com.codecool.secureerp.view.TerminalView;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.time.temporal.Temporal;
 import java.util.List;
 
 public class CrmController implements Closeable {
@@ -55,24 +54,34 @@ public class CrmController implements Closeable {
         terminalView.printTable(dao.getDataAsTable());
     }
     private void addCustomer() {
-        CrmModel newCustomer = promptCustomer(true);
+        String id = promptId(IdSearchType.NEW);
+        CrmModel newCustomer = createCustomerFromInput(id);
         dao.addCustomer(newCustomer);
     }
     private void updateCustomerById() {
-        String id = promptId();
-        CrmModel newCustomer = promptCustomer(false);
+        String id = promptId(IdSearchType.EXISTING);
+        CrmModel newCustomer = createCustomerFromInput(id);
         dao.updateCustomerById(id, newCustomer);
     }
-    private String promptId() {
+    private String promptId(IdSearchType searchType) {
         String id;
         while (true) {
             id = terminalView.getInput("Id: ");
-            if (dao.hasId(id)) return id;
+            boolean hasId = dao.hasId(id);
+            switch (searchType) {
+                case EXISTING -> {
+                    if (hasId) return id;
+                }
+                case NEW -> {
+                    if (!hasId) return id;
+                }
+                case ANY -> { return id;
+                }
+            }
             terminalView.printErrorMessage("id not present");
         }
     }
-    private CrmModel promptCustomer(boolean checkNoDuplicateId) {
-        String id = promptId();
+    private CrmModel createCustomerFromInput(String id) {
         String name = terminalView.getInput("Name: ");
         String email = terminalView.getInput("Email: ");
         boolean isSubscribed = promptIsSubscribed();
@@ -93,12 +102,12 @@ public class CrmController implements Closeable {
         } while (true);
     }
     private void deleteCustomer() {
-        String id = promptId();
+        String id = promptId(IdSearchType.EXISTING);
         dao.deleteCustomerById(id);
     }
     private void printSubscribed() {
         List<CrmModel> subscribedList = dao.getData().stream().filter(CrmModel::isSubscribed).toList();
-        terminalView.printGeneralResults(subscribedList.toString(), "subscribed: ");
+        terminalView.printGeneralResults(subscribedList.toString(), "subscribed");
     }
 
 }

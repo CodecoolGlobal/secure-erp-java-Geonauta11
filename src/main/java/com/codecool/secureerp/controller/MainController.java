@@ -47,11 +47,15 @@ public class MainController implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         try {
             crmController.close();
         } catch (IOException ignored) {}
-//        salesController.tearDown();
-//        hrController.tearDown();
+//        try {
+//            hrController.close();
+//        } catch(IOException ignored) {}
+//        try {
+//            salesController.close();
+//        } catch(IOException ignored) {}
     }
 }
