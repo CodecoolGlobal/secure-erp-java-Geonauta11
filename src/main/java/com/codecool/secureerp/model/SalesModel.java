@@ -1,6 +1,5 @@
 package com.codecool.secureerp.model;
 
-import java.util.Date;
 
 public class SalesModel {
     private final String id;
@@ -9,12 +8,13 @@ public class SalesModel {
     private final int price;
     private final String transactionDate;
 
-    public SalesModel(String id, String customerId, String product, int price, String transactionDate) {
+
+    public SalesModel(String id, String customerId, String product, int price, String date) {
         this.id = id;
         this.customerId = customerId;
         this.product = product;
         this.price = price;
-        this.transactionDate = transactionDate;
+        this.transactionDate = date;
     }
 
     public String getId() {

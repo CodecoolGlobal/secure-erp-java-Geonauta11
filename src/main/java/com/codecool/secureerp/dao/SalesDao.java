@@ -5,11 +5,12 @@ import com.codecool.secureerp.model.SalesModel;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SalesDao {
-
     private final static int ID_TABLE_INDEX = 0;
     private final static int CUSTOMER_ID_TABLE_INDEX = 1;
     private final static int PRODUCT_TABLE_INDEX = 2;
@@ -94,6 +95,35 @@ public class SalesDao {
             }
         }
         return productRecords;
+    }
+
+    private List<SalesModel> getSalesBetweenDates (String dateFrom, String dateTo){
+        List<SalesModel> sales = new ArrayList<>();
+        LocalDate startDate = LocalDate.parse(dateFrom, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        startDate = startDate.minusDays(1);
+        LocalDate endDate = LocalDate.parse(dateTo, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        for (SalesModel sale : data){
+            LocalDate saleDate = LocalDate.parse(sale.getTransactionDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            if (saleDate.isAfter(startDate) && saleDate.isBefore(endDate)){
+                sales.add(sale);
+            }
+        }
+        return sales;
+    }
+
+
+    public int getNumberOfSalesBetweenDates (String dateFromInput, String dateToInput){
+        return getSalesBetweenDates(dateFromInput, dateToInput).size();
+    }
+
+    public int getSumOfRevenueBetweenDates(String dateFromInput, String dateToInput){
+        int sum = 0;
+        List<SalesModel> sales = getSalesBetweenDates(dateFromInput, dateToInput);
+        for (SalesModel sale : sales){
+            sum += sale.getPrice();
+        }
+        return sum;
     }
 
 }
