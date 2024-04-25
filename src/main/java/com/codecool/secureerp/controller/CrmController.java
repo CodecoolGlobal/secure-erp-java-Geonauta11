@@ -6,7 +6,6 @@ import com.codecool.secureerp.view.TerminalView;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.time.temporal.Temporal;
 import java.util.List;
 
 public class CrmController implements Closeable {

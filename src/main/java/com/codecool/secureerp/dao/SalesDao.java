@@ -1,5 +1,6 @@
 package com.codecool.secureerp.dao;
 
+import com.codecool.secureerp.model.CrmModel;
 import com.codecool.secureerp.model.SalesModel;
 
 import java.io.BufferedReader;
@@ -10,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SalesDao {
+public class SalesDao extends Dao<SalesModel> {
     private final static int ID_TABLE_INDEX = 0;
     private final static int CUSTOMER_ID_TABLE_INDEX = 1;
     private final static int PRODUCT_TABLE_INDEX = 2;
@@ -22,22 +23,14 @@ public class SalesDao {
     private List<SalesModel> data;
 
     public void load() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(DATA_FILE));
-        data = reader.lines()
-                .map(SalesDao::csvRowToCustomer)
-                .toList();
-    }
-    private static String[] csvRowToArray(String row) {
-        return row.split(";");
+        super.load(DATA_FILE);
     }
 
-
-    private static SalesModel csvRowToCustomer(String row) {
-        return arrayToSale(csvRowToArray(row));
+    private SalesModel csvRowToCustomer(String row) {
+        return arrayToModel(csvRowToArray(row));
     }
 
-
-    private static SalesModel arrayToSale(String[] array) {
+    protected SalesModel arrayToModel(String[] array) {
         String id = array[ID_TABLE_INDEX];
         String customerId = array[CUSTOMER_ID_TABLE_INDEX];
         String product = array[PRODUCT_TABLE_INDEX];
@@ -46,7 +39,7 @@ public class SalesDao {
         return new SalesModel(id, customerId, product, price, date);
     }
 
-    private static String[] saleToArray(SalesModel sale) {
+    protected String[] modelToArray(SalesModel sale) {
         String[] salesArray = new String[5];
         salesArray[ID_TABLE_INDEX] = sale.getId();
         salesArray[CUSTOMER_ID_TABLE_INDEX] = sale.getCustomerId();
@@ -97,6 +90,7 @@ public class SalesDao {
         return productRecords;
     }
 
+
     private List<SalesModel> getSalesBetweenDates (String dateFrom, String dateTo){
         List<SalesModel> sales = new ArrayList<>();
         LocalDate startDate = LocalDate.parse(dateFrom, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -125,5 +119,45 @@ public class SalesDao {
         }
         return sum;
     }
+    public void save() throws IOException {
+        super.save(DATA_FILE);
+    }
 
+    private int getSaleIndexById(String id) {
+        for(int i=0; i<data.size(); i++) {
+            SalesModel sale = data.get(i);
+            if (id.equals(sale.getId())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public boolean addSale(SalesModel sale) {
+        data.add(sale);
+        return true;
+
+    }
+    public boolean updateSaleById(String id, SalesModel newSale) {
+        int index = getSaleIndexById(id);
+        if (index == -1) return false;
+        data.set(index, newSale);
+        return true;
+    }
+    public boolean deleteSaleById(String id) {
+        int index = getSaleIndexById(id);
+        if (index == -1) return false;
+        data.remove(index);
+        return true;
+    }
+    public boolean hasId(String id) {
+        return (getSaleById(id) != null);
+    }
+
+    public SalesModel getSaleById(String id) {
+        return data.stream()
+                .filter((customer) -> id.equals(customer.getId()))
+                .findFirst()
+                .orElse(null);
+    }
 }

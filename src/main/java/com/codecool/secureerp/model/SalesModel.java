@@ -1,7 +1,7 @@
 package com.codecool.secureerp.model;
 
 
-public class SalesModel {
+public class SalesModel implements Model {
     private final String id;
     private final String customerId;
     private final String product;

@@ -4,6 +4,7 @@ import com.codecool.secureerp.view.TerminalView;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.List;
 
 public class MainController implements Closeable {
     public static final String[] OPTIONS = new String[]{
@@ -51,7 +52,13 @@ public class MainController implements Closeable {
         try {
             crmController.close();
         } catch (IOException ignored) {}
-//        salesController.tearDown();
-//        hrController.tearDown();
+        try {
+            salesController.close();
+//        hrController.close();
+        } catch (IOException ignored) {}
+
+
     }
+
+
 }
