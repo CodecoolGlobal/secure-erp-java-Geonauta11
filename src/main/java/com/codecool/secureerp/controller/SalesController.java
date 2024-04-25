@@ -1,5 +1,6 @@
 package com.codecool.secureerp.controller;
 
+import com.codecool.secureerp.dao.SalesDao;
 import com.codecool.secureerp.view.TerminalView;
 
 public class SalesController {
@@ -15,6 +16,7 @@ public class SalesController {
             "Sum the price of transactions between"
     };
     private final TerminalView terminalView;
+    private final SalesDao dao = new SalesDao();
 
     public SalesController(TerminalView terminalView) {
         this.terminalView = terminalView;
@@ -22,5 +24,38 @@ public class SalesController {
 
     public void displayMenu() {
         terminalView.printMenu("Sales", OPTIONS);
+        int selected = Integer.parseInt(terminalView.getInput("Pick an option: "));
+//        switch (selected) {
+//            case 0 -> {
+//                break;
+//            }
+//
+//            case 1 -> {
+//                terminalView.getInputs();
+//                dao.displayMenu();
+//            }
+//            case 2 -> {
+//                dao.displayMenu();
+//            }
+//            case 3 -> {
+//                dao.displayMenu();
+//            }
+//            case 4 -> {
+//                dao.displayMenu();
+//            }
+//            case 5 -> {
+//                dao.displayMenu();
+//            }
+//            case 6 -> {
+//                dao.displayMenu();
+//            }
+//            case 7 -> {
+//                dao.displayMenu();
+//            }
+//            case 8 -> {
+//                dao.displayMenu();
+//            }
+//            default -> terminalView.printErrorMessage("Invalid menu item selected!\n");
+//        }
     }
 }
