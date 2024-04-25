@@ -1,11 +1,8 @@
 package com.codecool.secureerp.dao;
 
 import com.codecool.secureerp.model.CrmModel;
-import com.codecool.secureerp.model.Model;
 
 import java.io.*;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class CrmDao extends Dao<CrmModel>{
     private final static int ID_TABLE_INDEX = 0;

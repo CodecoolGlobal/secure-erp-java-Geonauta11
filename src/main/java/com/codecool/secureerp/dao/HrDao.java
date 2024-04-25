@@ -76,6 +76,12 @@ public class HrDao {
         }
     }
 
+    // Add employee
+    public boolean addEmployee(HrModel employee) {
+        hrEmployees.add(employee);
+        return true;
+    }
+
     // Return the name of the youngest employee
     public String getYoungestEmployeeName() {
         HrModel youngestEmployee = hrEmployees.get(0);
