@@ -48,11 +48,11 @@ public class SalesDao {
 
     private static String[] saleToArray(SalesModel sale) {
         String[] salesArray = new String[5];
-        salesArray[ID_TABLE_INDEX] = sale.getId();
-        salesArray[CUSTOMER_ID_TABLE_INDEX] = sale.getCustomerId();
-        salesArray[PRODUCT_TABLE_INDEX] = sale.getProductName();
-        salesArray[PRICE_TABLE_INDEX] = sale.getPrice() + "";
-        salesArray[TRANSACTION_DATE_TABLE_INDEX] = sale.getTransactionDate();
+        salesArray[ID_TABLE_INDEX] = sale.id();
+        salesArray[CUSTOMER_ID_TABLE_INDEX] = sale.customerId();
+        salesArray[PRODUCT_TABLE_INDEX] = sale.productName();
+        salesArray[PRICE_TABLE_INDEX] = sale.price() + "";
+        salesArray[TRANSACTION_DATE_TABLE_INDEX] = sale.transactionDate();
 
         return salesArray;
     }
@@ -60,7 +60,7 @@ public class SalesDao {
     public SalesModel getSaleWithBiggestRevenue (List<SalesModel> sales){
         SalesModel saleWithBiggestRevenue = sales.get(0);
         for (SalesModel sale : sales) {
-            if (sale.getPrice() > saleWithBiggestRevenue.getPrice()){
+            if (sale.price() > saleWithBiggestRevenue.price()){
                 saleWithBiggestRevenue = sale;
             }
         }
@@ -75,8 +75,8 @@ public class SalesDao {
         for (String record : productRecords) {
             int currentRevenue = 0;
             for (SalesModel sale : sales) {
-                if (sale.getProductName().equals(record)) {
-                    currentRevenue += sale.getPrice();
+                if (sale.productName().equals(record)) {
+                    currentRevenue += sale.price();
                 }
             }
             if (currentRevenue > biggestRevenue) {
@@ -90,8 +90,8 @@ public class SalesDao {
     private List<String> getRecords (List<SalesModel> sales){
         List<String> productRecords = new ArrayList<>();
         for (SalesModel sale : sales) {
-            if (!productRecords.contains(sale.getProductName())){
-                productRecords.add(sale.getProductName());
+            if (!productRecords.contains(sale.productName())){
+                productRecords.add(sale.productName());
             }
         }
         return productRecords;
@@ -104,7 +104,7 @@ public class SalesDao {
         LocalDate endDate = LocalDate.parse(dateTo, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         for (SalesModel sale : data){
-            LocalDate saleDate = LocalDate.parse(sale.getTransactionDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate saleDate = LocalDate.parse(sale.transactionDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             if (saleDate.isAfter(startDate) && saleDate.isBefore(endDate)){
                 sales.add(sale);
             }
@@ -121,7 +121,7 @@ public class SalesDao {
         int sum = 0;
         List<SalesModel> sales = getSalesBetweenDates(dateFromInput, dateToInput);
         for (SalesModel sale : sales){
-            sum += sale.getPrice();
+            sum += sale.price();
         }
         return sum;
     }

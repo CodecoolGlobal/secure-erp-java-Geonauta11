@@ -2,10 +2,7 @@ package com.codecool.secureerp.controller;
 
 import com.codecool.secureerp.view.TerminalView;
 
-import java.io.Closeable;
-import java.io.IOException;
-
-public class MainController implements Closeable {
+public class MainController{
     public static final String[] OPTIONS = new String[]{
             "Exit program",
             "Customer Relationship Management (CRM)",
@@ -28,8 +25,12 @@ public class MainController implements Closeable {
         boolean isRunning = true;
         while (isRunning) {
             terminalView.printMenu("Main menu", OPTIONS);
-            int menuItemIndex = Integer.parseInt(terminalView.getInput("Please select a menu item!"));
-            isRunning = invokeMenuItem(menuItemIndex);
+            try {
+                int menuItemIndex = Integer.parseInt(terminalView.getInput("Please select a menu item!"));
+                isRunning = invokeMenuItem(menuItemIndex);
+            } catch( NumberFormatException e) {
+                terminalView.printErrorMessage("not a number");
+            }
         }
     }
 
@@ -44,18 +45,5 @@ public class MainController implements Closeable {
             default -> terminalView.printErrorMessage("Invalid menu item selected!\n");
         }
         return true;
-    }
-
-    @Override
-    public void close() {
-        try {
-            crmController.close();
-        } catch (IOException ignored) {}
-//        try {
-//            hrController.close();
-//        } catch(IOException ignored) {}
-//        try {
-//            salesController.close();
-//        } catch(IOException ignored) {}
     }
 }

@@ -1,7 +1,6 @@
 package com.codecool.secureerp.controller;
 
 import com.codecool.secureerp.dao.HrDao;
-import com.codecool.secureerp.model.CrmModel;
 import com.codecool.secureerp.model.HrModel;
 import com.codecool.secureerp.view.TerminalView;
 
@@ -26,11 +25,7 @@ public class HrController {
     public HrController(TerminalView terminalView) throws IOException {
         this.terminalView = terminalView;
         dao = new HrDao();
-        dao.load();
-    }
-
-    public void close() throws IOException {
-        dao.save();
+        dao.loadData();
     }
 
     public void displayMenu() {
@@ -43,43 +38,47 @@ public class HrController {
     }
 
     private boolean invokeMenuItem(int selectedMenu) {
-        switch (selectedMenu) {
-            case 0 -> { return false; }
-            case 1 -> listEmployees();
-            case 2 -> addEmployee();
-            case 3 -> updateEmployeeById();
-            case 4 -> deleteEmployee();
-            case 5 -> printOldestAndYoungestEmployee();
-            case 6 -> printEmployeesAverageAge();
-            case 7 -> printEmployeesWithBirthdaysWithinTwoWeeks();
-            case 8 -> printEmployeesWithClearanceLevel();
-            case 9 -> printEmployeesByDepartment();
-            default -> terminalView.printErrorMessage("Invalid menu item selected!\n");
+        try {
+            switch (selectedMenu) {
+                case 0 -> { return false; }
+                case 1 -> listEmployees();
+                case 2 -> addEmployee();
+                case 3 -> updateEmployeeById();
+                case 4 -> deleteEmployee();
+                case 5 -> printOldestAndYoungestEmployee();
+                case 6 -> printEmployeesAverageAge();
+                case 7 -> printEmployeesWithBirthdaysWithinTwoWeeks();
+                case 8 -> printEmployeesWithClearanceLevel();
+                case 9 -> printEmployeesByDepartment();
+                default -> terminalView.printErrorMessage("Invalid menu item selected!\n");
+            }
+        } catch (IOException e) {
+            terminalView.printErrorMessage(e.getMessage());
         }
         return true;
     }
 
 
-    private void listEmployees() {
+    private void listEmployees() throws IOException {
         terminalView.printTable(dao.getDataAsTable());
     }
 
-    private void addEmployee() {
+    private void addEmployee() throws IOException {
         HrModel newEmployee = promptUser();
-        dao.addEmployee(newEmployee);
+        dao.addModel(newEmployee);
     }
 
-    private void updateEmployeeById() {
+    private void updateEmployeeById() throws IOException {
         HrModel updatedEmployee = promptUser();
-        dao.updateEmployee(updatedEmployee);
+        dao.updateModelById(updatedEmployee.id(), updatedEmployee);
     }
 
-    private void deleteEmployee() {
+    private void deleteEmployee() throws IOException {
         String id = terminalView.getInput("Enter employee id: ");
-        dao.deleteEmployeeById(id);
+        dao.deleteModelById(id);
     }
 
-    private void printOldestAndYoungestEmployee() {
+    private void printOldestAndYoungestEmployee() throws IOException {
         String youngestEmployeeName = dao.getYoungestEmployeeName();
         String oldestEmployeeName = dao.getOldestEmployeeName();
 
@@ -87,21 +86,21 @@ public class HrController {
         terminalView.printGeneralResults(oldestEmployeeName, "oldest");
     }
 
-    private void printEmployeesAverageAge() {
+    private void printEmployeesAverageAge() throws IOException {
         terminalView.printGeneralResults(Integer.toString(dao.getAverageAgeOfEmployees()), "average age");
     }
 
-    private void printEmployeesWithBirthdaysWithinTwoWeeks() {
+    private void printEmployeesWithBirthdaysWithinTwoWeeks() throws IOException {
         String date = terminalView.getInput("Enter a date (yyyy-mm-dd): ");
         terminalView.printGeneralResults(dao.getEmployeesWithBirthdaysWithinTwoWeeks(date).toString(), "employees with birthdays within 2 weeks");
     }
 
-    private void printEmployeesWithClearanceLevel() {
+    private void printEmployeesWithClearanceLevel() throws IOException {
         int clearanceLevel = Integer.parseInt(terminalView.getInput("Enter a clearance level: "));
         terminalView.printGeneralResults(Integer.toString(dao.getEmployeesWithMinimumClearanceLevel(clearanceLevel)), "clearance level");
     }
 
-    private void printEmployeesByDepartment() {
+    private void printEmployeesByDepartment() throws IOException {
         terminalView.printMessage(dao.getEmployeesCountByDepartment().toString());
     }
 
