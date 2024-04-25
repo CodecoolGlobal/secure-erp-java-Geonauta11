@@ -140,24 +140,4 @@ public class HrDao extends Dao<HrModel> {
 
         return departmentCountMap;
     }
-
-    public boolean validateYearInput(String yearInput) {
-        String validYearPattern = "^(19|20)[0-9][0-9]$";
-        return yearInput.matches(validYearPattern);
-    }
-
-    public boolean validateMonthInput(String monthInput) {
-        String validMonthPattern = "^(0?[1-9]|1[012])$";
-        return monthInput.matches(validMonthPattern);
-    }
-
-    public boolean validateDayInput(String dayInput) {
-        String validDayInput = "^(0?[1-9]|[12][0-9]|3[01])$";
-        return dayInput.matches(validDayInput);
-    }
-
-    public boolean validateDateInput(String dateInput) {
-        String validDatePattern = "^((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$";
-        return dateInput.matches(validDatePattern);
-    }
 }
