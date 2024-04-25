@@ -18,8 +18,7 @@ public class App {
         CrmController crmController = new CrmController(terminalView);
         SalesController salesController = new SalesController(terminalView);
         HrController hrController = new HrController(terminalView);
-        try (MainController mainController = new MainController(crmController, salesController, hrController, terminalView)) {
-            mainController.menu();
-        }
+        MainController mainController = new MainController(crmController, salesController, hrController, terminalView);
+        mainController.menu();
     }
 }

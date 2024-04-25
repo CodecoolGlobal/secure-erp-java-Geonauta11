@@ -1,17 +1,12 @@
 package com.codecool.secureerp.controller;
-
 import com.codecool.secureerp.dao.SalesDao;
-import com.codecool.secureerp.model.HrModel;
-import com.codecool.secureerp.model.SalesModel;
 import com.codecool.secureerp.view.TerminalView;
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
-
 public class SalesController {
     public static final String[] OPTIONS = new String[]{
             "Back to main menu",

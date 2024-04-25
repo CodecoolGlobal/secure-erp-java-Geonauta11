@@ -38,19 +38,19 @@ public class SalesDao extends Dao<SalesModel> {
 
     protected String[] modelToArray(SalesModel sale) {
         String[] salesArray = new String[5];
-        salesArray[ID_TABLE_INDEX] = sale.getId();
-        salesArray[CUSTOMER_ID_TABLE_INDEX] = sale.getCustomerId();
-        salesArray[PRODUCT_TABLE_INDEX] = sale.getProductName();
-        salesArray[PRICE_TABLE_INDEX] = sale.getPrice() + "";
-        salesArray[TRANSACTION_DATE_TABLE_INDEX] = sale.getTransactionDate();
+        salesArray[ID_TABLE_INDEX] = sale.id();
+        salesArray[CUSTOMER_ID_TABLE_INDEX] = sale.customerId();
+        salesArray[PRODUCT_TABLE_INDEX] = sale.productName();
+        salesArray[PRICE_TABLE_INDEX] = sale.price() + "";
+        salesArray[TRANSACTION_DATE_TABLE_INDEX] = sale.transactionDate();
 
         return salesArray;
     }
 
-    public SalesModel getSaleWithBiggestRevenue (){
-        SalesModel saleWithBiggestRevenue = data.get(0);
-        for (SalesModel sale : data) {
-            if (sale.getPrice() > saleWithBiggestRevenue.getPrice()){
+    public SalesModel getSaleWithBiggestRevenue (List<SalesModel> sales){
+        SalesModel saleWithBiggestRevenue = sales.get(0);
+        for (SalesModel sale : sales) {
+            if (sale.price() > saleWithBiggestRevenue.price()){
                 saleWithBiggestRevenue = sale;
             }
         }
@@ -80,8 +80,8 @@ public class SalesDao extends Dao<SalesModel> {
     private List<String> getRecords (List<SalesModel> sales){
         List<String> productRecords = new ArrayList<>();
         for (SalesModel sale : sales) {
-            if (!productRecords.contains(sale.getProductName())){
-                productRecords.add(sale.getProductName());
+            if (!productRecords.contains(sale.productName())){
+                productRecords.add(sale.productName());
             }
         }
         return productRecords;
@@ -95,7 +95,7 @@ public class SalesDao extends Dao<SalesModel> {
         LocalDate endDate = LocalDate.parse(dateTo, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         for (SalesModel sale : data){
-            LocalDate saleDate = LocalDate.parse(sale.getTransactionDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate saleDate = LocalDate.parse(sale.transactionDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             if (saleDate.isAfter(startDate) && saleDate.isBefore(endDate)){
                 sales.add(sale);
             }
@@ -112,22 +112,9 @@ public class SalesDao extends Dao<SalesModel> {
         int sum = 0;
         List<SalesModel> sales = getSalesBetweenDates(dateFromInput, dateToInput);
         for (SalesModel sale : sales){
-            sum += sale.getPrice();
+            sum += sale.price();
         }
         return sum;
-    }
-    public void save() throws IOException {
-        super.save(DATA_FILE);
-    }
-
-    private int getSaleIndexById(String id) {
-        for(int i=0; i<data.size(); i++) {
-            SalesModel sale = data.get(i);
-            if (id.equals(sale.getId())) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     public boolean addSale(SalesModel sale) {
