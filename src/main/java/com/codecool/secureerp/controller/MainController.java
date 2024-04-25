@@ -39,9 +39,9 @@ public class MainController{
             case 0 -> {
                 return false;
             }
-            case 1 -> crmController.displayMenu();
-            case 2 -> salesController.displayMenu();
-            case 3 -> hrController.displayMenu();
+            case 1 -> crmController.menu();
+            case 2 -> salesController.menu();
+            case 3 -> hrController.menu();
             default -> terminalView.printErrorMessage("Invalid menu item selected!\n");
         }
         return true;

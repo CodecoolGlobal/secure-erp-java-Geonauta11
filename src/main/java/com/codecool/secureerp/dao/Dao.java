@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Dao<T extends Model> {
-    protected String[] headers;
+    private final String[] headers;
 
     public Dao(String[] headers) throws IOException {
         this.headers = headers;
@@ -27,10 +27,7 @@ public abstract class Dao<T extends Model> {
         return data.stream().map(this::modelToCsvRow)
             .collect(Collectors.joining("\n"));
     }
-    protected String getDataAsCsv() throws IOException {
-        return loadData().stream().map(this::modelToCsvRow)
-            .collect(Collectors.joining("\n"));
-    }
+
 
     protected String[] getHeaders() {
         return headers;

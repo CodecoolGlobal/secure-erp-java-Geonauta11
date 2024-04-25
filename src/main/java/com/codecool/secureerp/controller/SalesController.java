@@ -22,7 +22,7 @@ public class SalesController {
         this.terminalView = terminalView;
     }
 
-    public void displayMenu() {
+    public void menu() {
         terminalView.printMenu("Sales", OPTIONS);
         int selected = Integer.parseInt(terminalView.getInput("Pick an option: "));
     }

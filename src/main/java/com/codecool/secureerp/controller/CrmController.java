@@ -24,7 +24,7 @@ public class CrmController{
         dao = new CrmDao();
     }
 
-    public void displayMenu() {
+    public void menu() {
         boolean isRunning = true;
         while (isRunning) {
             terminalView.printMenu("Customer Relationship", OPTIONS);
@@ -117,4 +117,7 @@ public class CrmController{
         terminalView.printGeneralResults(subscribedNames.toString(), "subscribed");
     }
 
+    private void asd() {
+
+    }
 }

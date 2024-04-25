@@ -28,7 +28,7 @@ public class HrController {
         dao.loadData();
     }
 
-    public void displayMenu() {
+    public void menu() {
         boolean isRunning = true;
         while (isRunning) {
             terminalView.printMenu("Human Resources", OPTIONS);

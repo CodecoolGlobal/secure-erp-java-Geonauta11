@@ -3,8 +3,6 @@ package com.codecool.secureerp.view;
 import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TerminalView {
 
@@ -77,8 +75,8 @@ public class TerminalView {
         AsciiTable asciiTable = new AsciiTable();
         asciiTable.addRule();
 
-        for (int i = 0; i < table.length; i++) {
-            asciiTable.addRow(table[i]);
+        for (String[] strings : table) {
+            asciiTable.addRow(strings);
             asciiTable.addRule();
         }
         printMessage(asciiTable.render());
@@ -94,23 +92,6 @@ public class TerminalView {
     public String getInput(String label) {
         System.out.println(label + ":");
         return scanner.nextLine();
-    }
-
-
-    /**
-     * Gets a list of String inputs from the user
-     *
-     * @param labels array of Strings with the labels to be displayed before each prompt
-     * @return array of user inputs
-     */
-    public String[] getInputs(String[] labels) {
-        String[] inputs = new String[labels.length];
-
-        for(int i = 0; i < labels.length; i++) {
-            inputs[i] = getInput(labels[i]);
-        }
-
-        return inputs;
     }
 
     /**
