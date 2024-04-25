@@ -52,13 +52,7 @@ public class MainController implements Closeable {
         try {
             crmController.close();
         } catch (IOException ignored) {}
-        try {
-            salesController.close();
-//        hrController.close();
-        } catch (IOException ignored) {}
-
-
+//        salesController.tearDown();
+//        hrController.tearDown();
     }
-
-
 }
