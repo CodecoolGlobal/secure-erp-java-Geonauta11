@@ -1,5 +1,6 @@
 package com.codecool.secureerp.dao;
 
+import com.codecool.secureerp.model.CrmModel;
 import com.codecool.secureerp.model.HrModel;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class HrDao {
+public class HrDao extends Dao<HrModel> {
     private final static int ID_TABLE_INDEX = 0;
     private final static int NAME_TABLE_INDEX = 1;
     private final static int BIRTH_DATE_TABLE_INDEX = 2;
@@ -77,9 +78,8 @@ public class HrDao {
     }
 
     // Add employee
-    public boolean addEmployee(HrModel employee) {
+    public void addEmployee(HrModel employee) {
         hrEmployees.add(employee);
-        return true;
     }
 
     // Return the name of the youngest employee

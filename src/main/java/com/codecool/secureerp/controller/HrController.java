@@ -65,7 +65,8 @@ public class HrController {
     }
 
     private void addEmployee() {
-
+        HrModel newEmployee = promptUser();
+        dao.addEmployee(newEmployee);
     }
 
     private void updateEmployeeById() {
