@@ -54,54 +54,60 @@ public class CrmController implements Closeable {
         terminalView.printTable(dao.getDataAsTable());
     }
     private void addCustomer() {
-        CrmModel newCustomer = promptCustomer(true);
+        String id = promptId(IdSearchType.NEW);
+        CrmModel newCustomer = createCustomerFromInput(id);
         dao.addCustomer(newCustomer);
     }
     private void updateCustomerById() {
-        String id = promptId();
-        CrmModel newCustomer = promptCustomer(false);
+        String id = promptId(IdSearchType.EXISTING);
+        CrmModel newCustomer = createCustomerFromInput(id);
         dao.updateCustomerById(id, newCustomer);
     }
-    private String promptId() {
+    private String promptId(IdSearchType searchType) {
         String id;
         while (true) {
             id = terminalView.getInput("Id: ");
-            if (dao.hasId(id)) return id;
+            boolean hasId = dao.hasId(id);
+            switch (searchType) {
+                case EXISTING -> {
+                    if (hasId) return id;
+                }
+                case NEW -> {
+                    if (!hasId) return id;
+                }
+                case ANY -> { return id;
+                }
+            }
             terminalView.printErrorMessage("id not present");
         }
     }
-    private CrmModel promptCustomer(boolean checkNoDuplicateId) {
-        String id;
-        do {
-            id = terminalView.getInput("Id: ");
-            if (!checkNoDuplicateId || !dao.hasId(id)) break;
-            terminalView.printErrorMessage("id already exists");
-        } while (true);
+    private CrmModel createCustomerFromInput(String id) {
         String name = terminalView.getInput("Name: ");
         String email = terminalView.getInput("Email: ");
-        boolean isSubscribed;
+        boolean isSubscribed = promptIsSubscribed();
+        return new CrmModel(id, name, email, isSubscribed);
+    }
+    private boolean promptIsSubscribed() {
+        String isSubscribedString;
         do  {
-            String isSubscribedString = terminalView.getInput("Subscribed (Yes/No): ");
+            isSubscribedString = terminalView.getInput("Subscribed (Yes/No): ");
             if (isSubscribedString.equalsIgnoreCase("yes") ||
                 isSubscribedString.equalsIgnoreCase("y")) {
-                isSubscribed = true;
-                break;
+                return true;
             } else if (isSubscribedString.equalsIgnoreCase("no") ||
                 isSubscribedString.equalsIgnoreCase("n")) {
-                isSubscribed = false;
-                break;
+                return false;
             }
             terminalView.printMessage("invalid input");
         } while (true);
-        return new CrmModel(id, name, email, isSubscribed);
     }
     private void deleteCustomer() {
-        String id = promptId();
+        String id = promptId(IdSearchType.EXISTING);
         dao.deleteCustomerById(id);
     }
     private void printSubscribed() {
         List<CrmModel> subscribedList = dao.getData().stream().filter(CrmModel::isSubscribed).toList();
-        terminalView.printGeneralResults(subscribedList.toString(), "subscribed: ");
+        terminalView.printGeneralResults(subscribedList.toString(), "subscribed");
     }
 
 }

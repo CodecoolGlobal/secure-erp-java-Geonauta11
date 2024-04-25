@@ -8,12 +8,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Dao<T extends Model> {
     protected List<T> data = new ArrayList<>();
+    protected String[] headers;
+
+    public Dao(String[] headers) {
+        this.headers = headers;
+    }
 
     protected String arrayToCsvRow(String[] array) {
         return String.join(";", array);
@@ -27,12 +31,14 @@ public abstract class Dao<T extends Model> {
             .collect(Collectors.joining("\n"));
     }
 
-    public String[][] getDataAsTable() {
-        System.out.println(data.toString());
-        String[][] table = data.stream().map(this::modelToArray).toArray(String[][]::new);
-        System.out.println(Arrays.deepToString(table));
+    protected String[] getHeaders() {
+        return headers;
+    }
 
-        return table;
+    public String[][] getDataAsTable() {
+        List<String[]> table = data.stream().map(this::modelToArray).collect(Collectors.toList());
+        table.add(0, getHeaders());
+        return table.toArray(new String[0][]);
     }
     public void load(String DATA_FILE) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(DATA_FILE));
@@ -56,6 +62,9 @@ public abstract class Dao<T extends Model> {
     protected String[] csvRowToArray(String row) {
         return row.split(";");
     }
+
+    public abstract void load() throws IOException;
+    public abstract void save() throws IOException;
     protected abstract T arrayToModel(String[] array);
     protected abstract String[] modelToArray(T customer);
 }
