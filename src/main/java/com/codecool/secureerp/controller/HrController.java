@@ -70,36 +70,43 @@ public class HrController {
     }
 
     private void updateEmployeeById() {
-
+        HrModel updatedEmployee = promptUser();
+        dao.updateEmployee(updatedEmployee);
     }
 
     private void deleteEmployee() {
-
+        String id = terminalView.getInput("Enter employee id: ");
+        dao.deleteEmployeeById(id);
     }
 
     private void printOldestAndYoungestEmployee() {
+        String youngestEmployeeName = dao.getYoungestEmployeeName();
+        String oldestEmployeeName = dao.getOldestEmployeeName();
 
+        terminalView.printGeneralResults(youngestEmployeeName, "youngest");
+        terminalView.printGeneralResults(oldestEmployeeName, "oldest");
     }
 
     private void printEmployeesAverageAge() {
-
+        terminalView.printGeneralResults(Integer.toString(dao.getAverageAgeOfEmployees()), "average age");
     }
 
     private void printEmployeesWithBirthdaysWithinTwoWeeks() {
-
+        String date = terminalView.getInput("Enter a date (yyyy-mm-dd): ");
+        terminalView.printGeneralResults(dao.getEmployeesWithBirthdaysWithinTwoWeeks(date).toString(), "employees with birthdays within 2 weeks");
     }
 
     private void printEmployeesWithClearanceLevel() {
-
+        int clearanceLevel = Integer.parseInt(terminalView.getInput("Enter a clearance level: "));
+        terminalView.printGeneralResults(Integer.toString(dao.getEmployeesWithMinimumClearanceLevel(clearanceLevel)), "clearance level");
     }
 
     private void printEmployeesByDepartment() {
-
+        terminalView.printMessage(dao.getEmployeesCountByDepartment().toString());
     }
 
-    // Prompt User
     private HrModel promptUser() {
-        int id = Integer.parseInt(terminalView.getInput("Enter ID:"));
+        String id = terminalView.getInput("Enter ID:");
         String name = terminalView.getInput("Enter name:");
         String birthDate = terminalView.getInput("Enter birth date:");
         String department = terminalView.getInput("Enter department:");
