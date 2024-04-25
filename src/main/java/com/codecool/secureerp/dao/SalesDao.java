@@ -15,16 +15,17 @@ public class SalesDao extends Dao<SalesModel> {
     private final static String DATA_FILE = "src/main/resources/sales.csv";
     public static String[] headers = {"Id", "Customer Id", "Product", "Price", "Transaction Date"};
 
-    public SalesDao() {
+    public SalesDao() throws IOException {
         super(headers);
     }
 
-    public void load() throws IOException {
-        super.load(DATA_FILE);
+    public List<SalesModel> loadData() throws IOException {
+        return super.loadData(DATA_FILE);
     }
 
-    private SalesModel csvRowToCustomer(String row) {
-        return arrayToModel(csvRowToArray(row));
+    public void save(List<SalesModel> data) throws IOException {
+        super.save(DATA_FILE, data);
+
     }
 
     protected SalesModel arrayToModel(String[] array) {
@@ -47,9 +48,10 @@ public class SalesDao extends Dao<SalesModel> {
         return salesArray;
     }
 
-    public SalesModel getSaleWithBiggestRevenue (List<SalesModel> sales){
-        SalesModel saleWithBiggestRevenue = sales.get(0);
-        for (SalesModel sale : sales) {
+    public SalesModel getSaleWithBiggestRevenue () throws IOException {
+        List<SalesModel> data = loadData();
+        SalesModel saleWithBiggestRevenue = data.get(0);
+        for (SalesModel sale : data) {
             if (sale.price() > saleWithBiggestRevenue.price()){
                 saleWithBiggestRevenue = sale;
             }
@@ -57,7 +59,8 @@ public class SalesDao extends Dao<SalesModel> {
         return saleWithBiggestRevenue;
     }
 
-    public String getBiggestRevenueProduct (){
+    public String getBiggestRevenueProduct () throws IOException {
+        List<SalesModel> data = loadData();
         List<String> productRecords = getRecords(data);
         String biggestRevenueProduct = productRecords.get(0);
         double biggestRevenue = 0;
@@ -65,8 +68,8 @@ public class SalesDao extends Dao<SalesModel> {
         for (String record : productRecords) {
             double currentRevenue = 0;
             for (SalesModel sale : data) {
-                if (sale.getProductName().equals(record)) {
-                    currentRevenue += sale.getPrice();
+                if (sale.productName().equals(record)) {
+                    currentRevenue += sale.price();
                 }
             }
             if (currentRevenue > biggestRevenue) {
@@ -88,7 +91,8 @@ public class SalesDao extends Dao<SalesModel> {
     }
 
 
-    private List<SalesModel> getSalesBetweenDates (String dateFrom, String dateTo){
+    private List<SalesModel> getSalesBetweenDates (String dateFrom, String dateTo) throws IOException {
+        List<SalesModel> data = loadData();
         List<SalesModel> sales = new ArrayList<>();
         LocalDate startDate = LocalDate.parse(dateFrom, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         startDate = startDate.minusDays(1);
@@ -104,44 +108,16 @@ public class SalesDao extends Dao<SalesModel> {
     }
 
 
-    public int getNumberOfSalesBetweenDates (String dateFromInput, String dateToInput){
+    public int getNumberOfSalesBetweenDates (String dateFromInput, String dateToInput) throws IOException {
         return getSalesBetweenDates(dateFromInput, dateToInput).size();
     }
 
-    public int getSumOfRevenueBetweenDates(String dateFromInput, String dateToInput){
-        int sum = 0;
+    public double getSumOfRevenueBetweenDates(String dateFromInput, String dateToInput) throws IOException {
+        double sum = 0;
         List<SalesModel> sales = getSalesBetweenDates(dateFromInput, dateToInput);
         for (SalesModel sale : sales){
             sum += sale.price();
         }
         return sum;
-    }
-
-    public boolean addSale(SalesModel sale) {
-        data.add(sale);
-        return true;
-
-    }
-    public boolean updateSaleById(String id, SalesModel newSale) {
-        int index = getSaleIndexById(id);
-        if (index == -1) return false;
-        data.set(index, newSale);
-        return true;
-    }
-    public boolean deleteSaleById(String id) {
-        int index = getSaleIndexById(id);
-        if (index == -1) return false;
-        data.remove(index);
-        return true;
-    }
-    public boolean hasId(String id) {
-        return (getSaleById(id) != null);
-    }
-
-    public SalesModel getSaleById(String id) {
-        return data.stream()
-                .filter((customer) -> id.equals(customer.getId()))
-                .findFirst()
-                .orElse(null);
     }
 }

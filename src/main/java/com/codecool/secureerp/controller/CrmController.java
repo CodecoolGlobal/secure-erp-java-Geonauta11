@@ -8,7 +8,7 @@ import com.codecool.secureerp.view.TerminalView;
 import java.io.IOException;
 import java.util.List;
 
-public class CrmController implements Closeable {
+public class CrmController{
     public static final String[] OPTIONS = new String[]{
             "Back to main menu",
             "List customers",
@@ -23,10 +23,6 @@ public class CrmController implements Closeable {
     public CrmController(TerminalView terminalView) throws IOException{
         this.terminalView = terminalView;
         dao = new CrmDao();
-        dao.load();
-    }
-    public void close() throws IOException{
-        dao.save();
     }
 
     public void menu() {
@@ -122,8 +118,8 @@ public class CrmController implements Closeable {
         terminalView.printGeneralResults(subscribedNames.toString(), "subscribed");
     }
 
-    public List<String> getAllCustomerId(){
-        List<CrmModel> data = dao.getData();
+    public List<String> getAllCustomerId() throws IOException {
+        List<CrmModel> data = dao.loadData();
         return data.stream().map(CrmModel::id).toList();
     }
 }

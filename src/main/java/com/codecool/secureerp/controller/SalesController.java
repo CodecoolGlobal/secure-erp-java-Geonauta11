@@ -1,5 +1,6 @@
 package com.codecool.secureerp.controller;
 import com.codecool.secureerp.dao.SalesDao;
+import com.codecool.secureerp.model.SalesModel;
 import com.codecool.secureerp.view.TerminalView;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -25,24 +26,23 @@ public class SalesController {
 
     public SalesController(TerminalView terminalView) throws IOException {
         this.terminalView = terminalView;
-        dao.load();
     }
 
-    public void displayMenu(List<String> customerIdList) {
+    public void menu(List<String> customerIdList) {
         this.customerIdList = customerIdList;
         boolean isRunning = true;
         while (isRunning) {
             terminalView.printMenu("Sales Operation", OPTIONS);
-            int selectedMenu = Integer.parseInt(terminalView.getInput("Please select one of the following options:"));
-            isRunning = invokeMenuItem(selectedMenu);
+            try {
+                int selectedMenu = Integer.parseInt(terminalView.getInput("Please select one of the following options:"));
+                isRunning = invokeMenuItem(selectedMenu);
+            } catch (IOException e) {
+                terminalView.printErrorMessage("not a number");
+            }
         }
     }
 
-    public void close() throws IOException {
-        dao.save();
-    }
-
-    private boolean invokeMenuItem(int selectedMenu) {
+    private boolean invokeMenuItem(int selectedMenu) throws IOException {
         switch (selectedMenu) {
             case 0 -> {
                 return false;
@@ -51,16 +51,16 @@ public class SalesController {
                 terminalView.printTable(dao.getDataAsTable());
             }
             case 2 -> {
-                dao.addSale(promptSale(true));
+                dao.addModel(promptSale(true));
             }
             case 3 -> {
-                dao.updateSaleById(terminalView.getInput(
+                dao.updateModelById(terminalView.getInput(
                                 "Enter the id of transaction you want to update: "),
                         promptSale(false)
                 );
             }
             case 4 -> {
-                dao.deleteSaleById(terminalView.getInput("Enter the id of transaction you want to delete: "));
+                dao.deleteModelById(terminalView.getInput("Enter the id of transaction you want to delete: "));
             }
             case 5 -> {
                 terminalView.printMessage(dao.getSaleWithBiggestRevenue().toString());
@@ -70,7 +70,7 @@ public class SalesController {
             }
             case 7 -> {
                 String[] startInputQuestions = {"Please insert the starting year (inclusive): ", "Please insert the starting month (inclusive): ", "Please insert the starting day (inclusive): "};
-                String[] endInputQuestions = {"Please insert the starting year (exclusive): ", "Please insert the starting month (exclusive): ", "Please insert the starting day (exclusive): "};
+                String[] endInputQuestions = {"Please insert the ending year (exclusive): ", "Please insert the ending month (exclusive): ", "Please insert the ending day (exclusive): "};
                 String startDate;
                 String endDate;
 
@@ -86,7 +86,7 @@ public class SalesController {
             }
             case 8 -> {
                 String[] startInputQuestions = {"Please insert the starting year (inclusive): ", "Please insert the starting month (inclusive): ", "Please insert the starting day (inclusive): "};
-                String[] endInputQuestions = {"Please insert the starting year (exclusive): ", "Please insert the starting month (exclusive): ", "Please insert the starting day (exclusive): "};
+                String[] endInputQuestions = {"Please insert the ending year (exclusive): ", "Please insert the ending month (exclusive): ", "Please insert the ending day (exclusive): "};
                 String startDate;
                 String endDate;
 
@@ -96,7 +96,7 @@ public class SalesController {
 
                 do {
                     endDate = String.join("-", terminalView.getInputs(endInputQuestions));
-                } while (!validateDateInput(startDate));
+                } while (!validateDateInput(endDate));
 
                 dao.getSumOfRevenueBetweenDates(startDate, endDate);
 
@@ -109,7 +109,7 @@ public class SalesController {
 
 
 
-    private SalesModel promptSale(boolean checkNoDuplicateId) {
+    private SalesModel promptSale(boolean checkNoDuplicateId) throws IOException {
         String id;
         int price = -1;
         String customerId;

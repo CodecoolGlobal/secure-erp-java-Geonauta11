@@ -94,6 +94,23 @@ public class TerminalView {
         return scanner.nextLine();
     }
 
+
+    /**
+     * Gets a list of String inputs from the user
+     *
+     * @param labels array of Strings with the labels to be displayed before each prompt
+     * @return array of user inputs
+     */
+    public String[] getInputs(String[] labels) {
+        String[] inputs = new String[labels.length];
+
+        for(int i = 0; i < labels.length; i++) {
+            inputs[i] = getInput(labels[i]);
+        }
+
+        return inputs;
+    }
+
     /**
      * Prints out error messages to terminal
      *

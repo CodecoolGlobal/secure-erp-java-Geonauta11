@@ -5,7 +5,7 @@ import com.codecool.secureerp.view.TerminalView;
 import java.io.Closeable;
 import java.io.IOException;
 
-public class MainController implements Closeable {
+public class MainController{
     public static final String[] OPTIONS = new String[]{
             "Exit program",
             "Customer Relationship Management (CRM)",
@@ -38,14 +38,18 @@ public class MainController implements Closeable {
     }
 
     private boolean invokeMenuItem(int selectedMenu) {
-        switch (selectedMenu) {
-            case 0 -> {
-                return false;
+        try {
+            switch (selectedMenu) {
+                case 0 -> {
+                    return false;
+                }
+                case 1 -> crmController.menu();
+                case 2 -> salesController.menu(crmController.getAllCustomerId());
+                case 3 -> hrController.menu();
+                default -> terminalView.printErrorMessage("Invalid menu item selected!\n");
             }
-            case 1 -> crmController.menu();
-            case 2 -> salesController.menu();
-            case 3 -> hrController.menu();
-            default -> terminalView.printErrorMessage("Invalid menu item selected!\n");
+        } catch (IOException e) {
+
         }
         return true;
     }
