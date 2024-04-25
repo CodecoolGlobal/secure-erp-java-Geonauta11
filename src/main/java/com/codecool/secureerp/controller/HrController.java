@@ -37,7 +37,7 @@ public class HrController {
         boolean isRunning = true;
         while (isRunning) {
             terminalView.printMenu("Human Resources", OPTIONS);
-            int selectedMenu = Integer.parseInt(terminalView.getInput("Please select one of the following options:"));
+            int selectedMenu = Integer.parseInt(terminalView.getInput("Please select one of the following options"));
             isRunning = invokeMenuItem(selectedMenu);
         }
     }
@@ -75,7 +75,7 @@ public class HrController {
     }
 
     private void deleteEmployee() {
-        String id = terminalView.getInput("Enter employee id: ");
+        String id = terminalView.getInput("Enter employee id");
         dao.deleteEmployeeById(id);
     }
 
@@ -83,22 +83,22 @@ public class HrController {
         String youngestEmployeeName = dao.getYoungestEmployeeName();
         String oldestEmployeeName = dao.getOldestEmployeeName();
 
-        terminalView.printGeneralResults(youngestEmployeeName, "youngest");
-        terminalView.printGeneralResults(oldestEmployeeName, "oldest");
+        terminalView.printGeneralResults(youngestEmployeeName, "Youngest employee");
+        terminalView.printGeneralResults(oldestEmployeeName, "Oldest employee");
     }
 
     private void printEmployeesAverageAge() {
-        terminalView.printGeneralResults(Integer.toString(dao.getAverageAgeOfEmployees()), "average age");
+        terminalView.printGeneralResults(Integer.toString(dao.getAverageAgeOfEmployees()), "Average age of employees");
     }
 
     private void printEmployeesWithBirthdaysWithinTwoWeeks() {
-        String date = terminalView.getInput("Enter a date (yyyy-mm-dd): ");
-        terminalView.printGeneralResults(dao.getEmployeesWithBirthdaysWithinTwoWeeks(date).toString(), "employees with birthdays within 2 weeks");
+        String date = terminalView.getInput("Enter a date (yyyy-mm-dd)");
+        terminalView.printGeneralResults(dao.getEmployeesWithBirthdaysWithinTwoWeeks(date).toString(), "Employees with birthdays within 2 weeks");
     }
 
     private void printEmployeesWithClearanceLevel() {
-        int clearanceLevel = Integer.parseInt(terminalView.getInput("Enter a clearance level: "));
-        terminalView.printGeneralResults(Integer.toString(dao.getEmployeesWithMinimumClearanceLevel(clearanceLevel)), "clearance level");
+        int clearanceLevel = Integer.parseInt(terminalView.getInput("Enter a clearance level"));
+        terminalView.printGeneralResults(Integer.toString(dao.getEmployeesWithMinimumClearanceLevel(clearanceLevel)), "Employees with the provided clearance level");
     }
 
     private void printEmployeesByDepartment() {
@@ -106,12 +106,75 @@ public class HrController {
     }
 
     private HrModel promptUser() {
-        String id = terminalView.getInput("Enter ID:");
-        String name = terminalView.getInput("Enter name:");
-        String birthDate = terminalView.getInput("Enter birth date:");
-        String department = terminalView.getInput("Enter department:");
-        int clearance = Integer.parseInt(terminalView.getInput("Enter clearance:"));
+        String id = terminalView.getInput("Enter ID");
+        String name = terminalView.getInput("Enter name");
+        String birthDate = promptDate();
+        String department = terminalView.getInput("Enter department");
+        int clearance = Integer.parseInt(terminalView.getInput("Enter clearance"));
 
         return new HrModel(id, name, birthDate, department, clearance);
+    }
+
+    private String promptDate() {
+        String year = getYearInput();
+        String month = getMonthInput();
+        String day = getDayInput();
+
+        return String.join("-", year, month, day);
+    }
+
+
+    private String getYearInput() {
+        String yearInput;
+        do {
+            yearInput = terminalView.getInput("Enter a year");
+        } while (!checkIfYearInputIsValid(yearInput));
+        return yearInput;
+    }
+    private boolean checkIfYearInputIsValid(String yearInput) {
+        String validYearPattern = "^(19|20)[0-9][0-9]$";
+        if(!yearInput.matches(validYearPattern)) {
+            terminalView.printErrorMessage("Invalid year input!\n");
+            return false;
+        }
+        return true;
+    }
+
+    private String getMonthInput() {
+        String monthInput;
+        do {
+            monthInput = terminalView.getInput("Enter a month");
+        } while (!checkIfMonthInputIsValid(monthInput));
+        return monthInput;
+    }
+    private boolean checkIfMonthInputIsValid(String monthInput) {
+        String validMonthPattern = "^(0?[1-9]|1[012])$";
+        if(!monthInput.matches(validMonthPattern)) {
+            terminalView.printErrorMessage("Invalid month input!\n");
+            return false;
+        }
+        return true;
+    }
+
+    private String getDayInput() {
+        String dayInput;
+        do {
+            dayInput = terminalView.getInput("Enter a day");
+        } while (!checkIfDayInputIsValid(dayInput));
+        return dayInput;
+    }
+    private boolean checkIfDayInputIsValid(String dayInput) {
+        String validDayInput = "^(0?[1-9]|[12][0-9]|3[01])$";
+        if(!dayInput.matches(validDayInput)) {
+            terminalView.printErrorMessage("Invalid day input!\n");
+            return false;
+        }
+        return true;
+    }
+
+
+    public boolean validateDateInput(String dateInput) {
+        String validDatePattern = "^((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$";
+        return dateInput.matches(validDatePattern);
     }
 }

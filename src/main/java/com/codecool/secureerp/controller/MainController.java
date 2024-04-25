@@ -28,7 +28,7 @@ public class MainController implements Closeable {
         boolean isRunning = true;
         while (isRunning) {
             terminalView.printMenu("Main menu", OPTIONS);
-            int menuItemIndex = Integer.parseInt(terminalView.getInput("Please select a menu item!"));
+            int menuItemIndex = Integer.parseInt(terminalView.getInput("Please select a menu item"));
             isRunning = invokeMenuItem(menuItemIndex);
         }
     }
@@ -51,9 +51,9 @@ public class MainController implements Closeable {
         try {
             crmController.close();
         } catch (IOException ignored) {}
-//        try {
-//            hrController.close();
-//        } catch(IOException ignored) {}
+        try {
+            hrController.close();
+        } catch(IOException ignored) {}
 //        try {
 //            salesController.close();
 //        } catch(IOException ignored) {}
