@@ -107,12 +107,28 @@ public class HrController {
 
     private HrModel promptUser() {
         String id = terminalView.getInput("Enter ID");
-        String name = terminalView.getInput("Enter name");
+        String name = getNameInput();
         String birthDate = promptDate();
         String department = terminalView.getInput("Enter department");
         int clearance = Integer.parseInt(terminalView.getInput("Enter clearance"));
 
         return new HrModel(id, name, birthDate, department, clearance);
+    }
+
+    private String getNameInput() {
+        String nameInput;
+        do {
+            nameInput = terminalView.getInput("Enter an employee name");
+        } while (!checkIfNameInputIsValid(nameInput));
+        return nameInput;
+    }
+    private boolean checkIfNameInputIsValid(String nameInput) {
+        String validNamePattern = "^[a-zA-Z]+$";
+        if(!nameInput.matches(validNamePattern)) {
+            terminalView.printErrorMessage("Invalid name input! It must not contain numbers, special characters and cannot be empty.\n");
+            return false;
+        }
+        return true;
     }
 
     private String promptDate() {
@@ -170,11 +186,5 @@ public class HrController {
             return false;
         }
         return true;
-    }
-
-
-    public boolean validateDateInput(String dateInput) {
-        String validDatePattern = "^((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$";
-        return dateInput.matches(validDatePattern);
     }
 }
