@@ -1,17 +1,19 @@
 package com.codecool.secureerp.dao;
 
+import com.codecool.secureerp.controller.CrmController;
 import com.codecool.secureerp.model.Model;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class Dao<T extends Model> {
-    protected List<T> data;
+    protected List<T> data = new ArrayList<>();
 
     protected String arrayToCsvRow(String[] array) {
         return String.join(";", array);
@@ -36,13 +38,16 @@ public abstract class Dao<T extends Model> {
         BufferedReader reader = new BufferedReader(new FileReader(DATA_FILE));
         data = reader.lines()
             .map(this::csvRowToModel)
-            .toList();
+            .collect(Collectors.toList());
     }
     public void save(String DATA_FILE) throws IOException {
         try (FileWriter fileWriter = new FileWriter(DATA_FILE)) {
             fileWriter.write(getDataAsCsv());
         }
+    }
 
+    public List<T> getData() {
+        return data;
     }
 
     protected T csvRowToModel(String row) {

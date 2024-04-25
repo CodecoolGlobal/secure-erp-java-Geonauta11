@@ -40,4 +40,39 @@ public class CrmDao extends Dao<CrmModel>{
     public void save() throws IOException {
         super.save(DATA_FILE);
     }
+    public CrmModel getCustomerById(String id) {
+        return data.stream()
+            .filter((customer) -> id.equals(customer.id()))
+            .findFirst()
+            .orElse(null);
+    }
+    private int getCustomerIndexById(String id) {
+        for(int i=0; i<data.size(); i++) {
+            CrmModel customer = data.get(i);
+            if (id.equals(customer.id())) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    public boolean addCustomer(CrmModel customer) {
+        data.add(customer);
+        return true;
+
+    }
+    public boolean updateCustomerById(String id, CrmModel newCustomer) {
+        int index = getCustomerIndexById(id);
+        if (index == -1) return false;
+        data.set(index, newCustomer);
+        return true;
+    }
+    public boolean deleteCustomerById(String id) {
+        int index = getCustomerIndexById(id);
+        if (index == -1) return false;
+        data.remove(index);
+        return true;
+    }
+    public boolean hasId(String id) {
+        return (getCustomerById(id) != null);
+    }
 }
