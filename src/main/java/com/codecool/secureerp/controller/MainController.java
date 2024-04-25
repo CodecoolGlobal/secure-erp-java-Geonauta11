@@ -2,33 +2,26 @@ package com.codecool.secureerp.controller;
 
 import com.codecool.secureerp.view.TerminalView;
 
+import java.io.Closeable;
 import java.io.IOException;
 
-public class MainController {
+public class MainController implements Closeable {
     public static final String[] OPTIONS = new String[]{
             "Exit program",
             "Customer Relationship Management (CRM)",
             "Sales",
             "Human Resources"
     };
-    private final CRMController crmController;
+    private final CrmController crmController;
     private final SalesController salesController;
-    private final HRController hrController;
+    private final HrController hrController;
     private final TerminalView terminalView;
 
-    public MainController(CRMController crmController, SalesController salesController, HRController hrController, TerminalView terminalView) {
+    public MainController(CrmController crmController, SalesController salesController, HrController hrController, TerminalView terminalView) {
         this.crmController = crmController;
         this.salesController = salesController;
         this.hrController = hrController;
         this.terminalView = terminalView;
-    }
-
-    public void tearDown() {
-        try {
-            crmController.tearDown();
-        } catch (IOException ignored) {}
-//        salesController.tearDown();
-//        hrController.tearDown();
     }
 
     public void menu() {
@@ -51,5 +44,14 @@ public class MainController {
             default -> terminalView.printErrorMessage("Invalid menu item selected!\n");
         }
         return true;
+    }
+
+    @Override
+    public void close() throws IOException {
+        try {
+            crmController.close();
+        } catch (IOException ignored) {}
+//        salesController.tearDown();
+//        hrController.tearDown();
     }
 }
