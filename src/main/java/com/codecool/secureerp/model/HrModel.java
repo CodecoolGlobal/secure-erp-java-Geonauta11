@@ -1,13 +1,13 @@
 package com.codecool.secureerp.model;
 
-public class HRModel {
+public class HrModel {
     private int id;
     private String name;
     private String birthDate;
     private String department;
     private int clearance;
 
-    public HRModel(int id, String name, String birthDate, String department, int clearance) {
+    public HrModel(int id, String name, String birthDate, String department, int clearance) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
