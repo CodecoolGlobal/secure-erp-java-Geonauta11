@@ -1,11 +1,12 @@
 package com.codecool.secureerp.controller;
 
-import com.codecool.secureerp.dao.CRMDAO;
+import com.codecool.secureerp.dao.CrmDao;
 import com.codecool.secureerp.view.TerminalView;
 
+import java.io.Closeable;
 import java.io.IOException;
 
-public class CRMController {
+public class CrmController implements Closeable {
     public static final String[] OPTIONS = new String[]{
             "Back to main menu",
             "List customers",
@@ -15,14 +16,14 @@ public class CRMController {
             "Subscribed customer emails"
     };
     private final TerminalView terminalView;
-    private final CRMDAO dao;
+    private final CrmDao dao;
 
-    public CRMController(TerminalView terminalView) throws IOException{
+    public CrmController(TerminalView terminalView) throws IOException{
         this.terminalView = terminalView;
-        dao = new CRMDAO();
+        dao = new CrmDao();
         dao.load();
     }
-    public void tearDown() throws IOException{
+    public void close() throws IOException{
         dao.save();
     }
 

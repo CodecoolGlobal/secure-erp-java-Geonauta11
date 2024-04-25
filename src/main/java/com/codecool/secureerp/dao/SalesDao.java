@@ -1,16 +1,14 @@
 package com.codecool.secureerp.dao;
 
-import com.codecool.secureerp.model.CRMModel;
 import com.codecool.secureerp.model.SalesModel;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public class SalesDAO {
+public class SalesDao {
 
     private final static int ID_TABLE_INDEX = 0;
     private final static int CUSTOMER_ID_TABLE_INDEX = 1;
@@ -25,7 +23,7 @@ public class SalesDAO {
     public void load() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(DATA_FILE));
         data = reader.lines()
-                .map(SalesDAO::csvRowToCustomer)
+                .map(SalesDao::csvRowToCustomer)
                 .toList();
     }
     private static String[] csvRowToArray(String row) {

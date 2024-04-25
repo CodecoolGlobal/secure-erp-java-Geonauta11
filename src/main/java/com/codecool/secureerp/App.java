@@ -1,8 +1,8 @@
 package com.codecool.secureerp;
 
 
-import com.codecool.secureerp.controller.CRMController;
-import com.codecool.secureerp.controller.HRController;
+import com.codecool.secureerp.controller.CrmController;
+import com.codecool.secureerp.controller.HrController;
 import com.codecool.secureerp.controller.MainController;
 import com.codecool.secureerp.controller.SalesController;
 import com.codecool.secureerp.view.TerminalView;
@@ -15,14 +15,11 @@ public class App {
     public static void main(String[] args) throws IOException{
         Scanner scanner = new Scanner(System.in);
         TerminalView terminalView = new TerminalView(scanner);
-        CRMController crmController = new CRMController(terminalView);
+        CrmController crmController = new CrmController(terminalView);
         SalesController salesController = new SalesController(terminalView);
-        HRController hrController = new HRController(terminalView);
-        MainController mainController = new MainController(crmController, salesController, hrController, terminalView);
-        try {
+        HrController hrController = new HrController(terminalView);
+        try (MainController mainController = new MainController(crmController, salesController, hrController, terminalView)) {
             mainController.menu();
-        } finally {
-            mainController.tearDown();
         }
     }
 }

@@ -3,6 +3,8 @@ package com.codecool.secureerp.view;
 import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TerminalView {
 

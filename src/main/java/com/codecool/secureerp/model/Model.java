@@ -1,3 +1,4 @@
 package com.codecool.secureerp.model;
 
-public class HRModel {}
+public interface Model {
+}

@@ -1,6 +1,6 @@
 package com.codecool.secureerp.dao;
 
-public class HRDAO {
+public class HrDao {
     private final static int ID_TABLE_INDEX = 0;
     private final static int NAME_TABLE_INDEX = 1;
     private final static int BIRTH_DATE_TABLE_INDEX = 2;
