@@ -1,10 +1,5 @@
 package com.codecool.secureerp.dao;
-
-import com.codecool.secureerp.model.CrmModel;
 import com.codecool.secureerp.model.SalesModel;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,7 +15,9 @@ public class SalesDao extends Dao<SalesModel> {
     private final static String DATA_FILE = "src/main/resources/sales.csv";
     public static String[] headers = {"Id", "Customer Id", "Product", "Price", "Transaction Date"};
 
-    private List<SalesModel> data;
+    public SalesDao() {
+        super(headers);
+    }
 
     public void load() throws IOException {
         super.load(DATA_FILE);
@@ -34,7 +31,7 @@ public class SalesDao extends Dao<SalesModel> {
         String id = array[ID_TABLE_INDEX];
         String customerId = array[CUSTOMER_ID_TABLE_INDEX];
         String product = array[PRODUCT_TABLE_INDEX];
-        int price = Integer.parseInt(array[PRICE_TABLE_INDEX]);
+        double price = Double.parseDouble(array[PRICE_TABLE_INDEX]);
         String date = array[TRANSACTION_DATE_TABLE_INDEX];
         return new SalesModel(id, customerId, product, price, date);
     }
@@ -50,9 +47,9 @@ public class SalesDao extends Dao<SalesModel> {
         return salesArray;
     }
 
-    public SalesModel getSaleWithBiggestRevenue (List<SalesModel> sales){
-        SalesModel saleWithBiggestRevenue = sales.get(0);
-        for (SalesModel sale : sales) {
+    public SalesModel getSaleWithBiggestRevenue (){
+        SalesModel saleWithBiggestRevenue = data.get(0);
+        for (SalesModel sale : data) {
             if (sale.getPrice() > saleWithBiggestRevenue.getPrice()){
                 saleWithBiggestRevenue = sale;
             }
@@ -60,14 +57,14 @@ public class SalesDao extends Dao<SalesModel> {
         return saleWithBiggestRevenue;
     }
 
-    public String getBiggestRevenueProduct (List<SalesModel> sales){
-        List<String> productRecords = getRecords(sales);
+    public String getBiggestRevenueProduct (){
+        List<String> productRecords = getRecords(data);
         String biggestRevenueProduct = productRecords.get(0);
-        int biggestRevenue = 0;
+        double biggestRevenue = 0;
 
         for (String record : productRecords) {
-            int currentRevenue = 0;
-            for (SalesModel sale : sales) {
+            double currentRevenue = 0;
+            for (SalesModel sale : data) {
                 if (sale.getProductName().equals(record)) {
                     currentRevenue += sale.getPrice();
                 }

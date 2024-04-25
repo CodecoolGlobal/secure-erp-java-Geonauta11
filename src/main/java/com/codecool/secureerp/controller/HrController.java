@@ -6,6 +6,7 @@ import com.codecool.secureerp.model.HrModel;
 import com.codecool.secureerp.view.TerminalView;
 
 import java.io.IOException;
+import java.util.List;
 
 public class HrController {
     public static final String[] OPTIONS = new String[]{

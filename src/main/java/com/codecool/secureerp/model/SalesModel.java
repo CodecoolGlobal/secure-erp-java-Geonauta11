@@ -5,11 +5,11 @@ public class SalesModel implements Model {
     private final String id;
     private final String customerId;
     private final String product;
-    private final int price;
+    private final double price;
     private final String transactionDate;
 
 
-    public SalesModel(String id, String customerId, String product, int price, String date) {
+    public SalesModel(String id, String customerId, String product, double price, String date) {
         this.id = id;
         this.customerId = customerId;
         this.product = product;
@@ -29,11 +29,16 @@ public class SalesModel implements Model {
         return product;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
     public String getTransactionDate() {
         return transactionDate;
+    }
+
+    @Override
+    public String toString(){
+    return "Id: " + id + "| Customer Id: " + customerId + "| Product: " + product + "| Price: " + price + "| Transaction Date: " + transactionDate;
     }
 }

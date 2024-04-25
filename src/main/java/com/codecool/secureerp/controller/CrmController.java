@@ -2,6 +2,7 @@ package com.codecool.secureerp.controller;
 
 import com.codecool.secureerp.dao.CrmDao;
 import com.codecool.secureerp.model.CrmModel;
+import com.codecool.secureerp.model.HrModel;
 import com.codecool.secureerp.view.TerminalView;
 
 import java.io.Closeable;
@@ -110,4 +111,8 @@ public class CrmController implements Closeable {
         terminalView.printGeneralResults(subscribedList.toString(), "subscribed");
     }
 
+    public List<String> getAllCustomerId(){
+        List<CrmModel> data = dao.getData();
+        return data.stream().map(CrmModel::id).toList();
+    }
 }

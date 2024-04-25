@@ -40,7 +40,7 @@ public class MainController implements Closeable {
                 return false;
             }
             case 1 -> crmController.displayMenu();
-            case 2 -> salesController.displayMenu();
+            case 2 -> salesController.displayMenu(crmController.getAllCustomerId());
             case 3 -> hrController.displayMenu();
             default -> terminalView.printErrorMessage("Invalid menu item selected!\n");
         }

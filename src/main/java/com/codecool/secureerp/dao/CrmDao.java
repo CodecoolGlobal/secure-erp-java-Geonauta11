@@ -77,4 +77,5 @@ public class CrmDao extends Dao<CrmModel>{
     public boolean hasId(String id) {
         return (getCustomerById(id) != null);
     }
+
 }
