@@ -1,7 +1,6 @@
 package com.codecool.secureerp.dao;
 
 import com.codecool.secureerp.model.HrModel;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -155,5 +154,29 @@ public class HrDao {
         }
 
         return departmentCountMap;
+    }
+
+    // Validate year
+    public boolean validateYearInput(String yearInput) {
+        String validYearPattern = "^(19|20)[0-9][0-9]$";
+        return yearInput.matches(validYearPattern);
+    }
+
+    // Validate month
+    public boolean validateMonthInput(String monthInput) {
+        String validMonthPattern = "^(0?[1-9]|1[012])$";
+        return monthInput.matches(validMonthPattern);
+    }
+
+    // Validate day
+    public boolean validateDayInput(String dayInput) {
+        String validDayInput = "^(0?[1-9]|[12][0-9]|3[01])$";
+        return dayInput.matches(validDayInput);
+    }
+
+    // Validate year
+    public boolean validateDateInput(String dateInput) {
+        String validDatePattern = "^((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])$";
+        return dateInput.matches(validDatePattern);
     }
 }
