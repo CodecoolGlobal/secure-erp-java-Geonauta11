@@ -1,4 +1,4 @@
-# Welcome to the RESTMates project repository!
+# Welcome to the Secure ERP project repository!
 
 Secure ERP is an enterprise resource planning software where you can organise and view customers, Sales and HR people.
 
@@ -9,8 +9,8 @@ Secure ERP is an enterprise resource planning software where you can organise an
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Features](#features)
-  - [Dockerization](#dockerization)
   - [App Functionalities](#app-functionalities)
+  - [Dockerization](#dockerization)
 - [Usage](#usage)
 
 ## Overview
@@ -46,38 +46,13 @@ Secure ERP is an enterprise resource planning software. The project is written i
     # navigate into the project directory
     cd <foldername>
    ```
-2. Set environment variables in `.env.sample`:
-   ```bash
-   # db env variables
-   POSTGRES_DB=YOUR_DB_NAME
-   POSTGRES_USER=YOUR_DB_USERNAME
-   POSTGRES_PASSWORD=YOUR_DB_PASSWORD
-
-   ## backend env variables
-   SPRING_DATASOURCE_USERNAME=YOUR_DB_USERNAME
-   SPRING_DATASOURCE_PASSWORD=YOUR_DB_PASSWORD
-   CODECOOL_APP_JWTSECRET=YOUR_JWT_SECRET_KEY
-   ```
-   *The JWT secret key should be 64 characters long and should only include alphanumeric characters (A-Z, a-z, 0-9). It is advisable to avoid using special characters such as `-`, `/`, `+`, and `=` to prevent potential issues with encryption and encoding.*
-
-3. Rename `.env.sample` to `.env`:
-   ```
-   mv .env.sample .env
-   ```
-
-4. Build and start the containers:
-   ```bash
-   docker compose up --build
-   ```
-
-   *Docker will automatically set up the database and run the backend and frontend services.*
 
 
 #### Running the application
 
    - Run the applicationy:
      ```bash
-      javac 
+      javac <project-folder-name>/src/main/java/com/codecool/secureerp/App
      ```
 ## Features
   ### App Functionalities
@@ -93,8 +68,6 @@ Secure ERP is an enterprise resource planning software. The project is written i
 
   ### Dockerization
   - The application is fully containerized using Docker.
-  - Docker Compose manages multi-container setups, including the PostgreSQL database.
-  - Running with Docker Compose eliminates the need to manually create the database or configure environment variables locally.
 
 ## Usage
 Using Secure ERP:
