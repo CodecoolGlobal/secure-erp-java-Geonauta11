@@ -2,6 +2,8 @@
 
 Secure ERP is an enterprise resource planning software where you can organise and view customers, Sales and HR people.
 
+![main-menu](https://github.com/user-attachments/assets/9062cc57-999a-43e8-ae2a-7496e8ff26e4)
+
 ## Table of Contents
 - [Overview](#overview)
 - [Technologies](#technologies)
@@ -73,25 +75,31 @@ Secure ERP is an enterprise resource planning software. The project is written i
 Using Secure ERP:
   - Main Menu:
     - Detail: Display main menu.
-    - Visual: ![main-menu](https://github.com/user-attachments/assets/3c340576-a1d8-4969-81cb-e55b8a184627)
+    ![main-menu](https://github.com/user-attachments/assets/3c340576-a1d8-4969-81cb-e55b8a184627)
+
   - CRM:
     - Detail: Display CRM options.
-    - Visual: ![crm](https://github.com/user-attachments/assets/ca1fbde1-5fbe-4c01-b3ae-3f218a82d5c0)
+    ![crm](https://github.com/user-attachments/assets/ca1fbde1-5fbe-4c01-b3ae-3f218a82d5c0)
+
   - CRM Table:
     - Detail: Display customers in a table.
-    - Visual: ![list-customers](https://github.com/user-attachments/assets/3f5e282a-6f68-4a79-a66a-978f5b5dd6ee)
+    ![list-customers](https://github.com/user-attachments/assets/3f5e282a-6f68-4a79-a66a-978f5b5dd6ee)
+
   - Sales:
     - Detail: Display Sales options.
-    - Visuals: ![sales-operations](https://github.com/user-attachments/assets/eceac4df-8084-4129-889b-920a164bbaec)
+    ![sales-operations](https://github.com/user-attachments/assets/eceac4df-8084-4129-889b-920a164bbaec)
+
   - Sales Table:
     - Detail: Display transactions in a table.
-    - Visual: ![list-transactions](https://github.com/user-attachments/assets/b5c3d998-a499-41bd-93cd-e323110b28e4)
+    ![list-transactions](https://github.com/user-attachments/assets/b5c3d998-a499-41bd-93cd-e323110b28e4)
+
   - Human Resource:
     - Detail: Display HR options.
-    - Visuals: ![hr](https://github.com/user-attachments/assets/f584a21f-529c-4527-98bd-9d4bfa72eba2)
+    ![hr](https://github.com/user-attachments/assets/f584a21f-529c-4527-98bd-9d4bfa72eba2)
+
   - Human Resource Table:
     - Detail: Display HR employees in a table.
-    - Visual: ![hr-employees](https://github.com/user-attachments/assets/2b222444-beee-42a3-885a-b5427396de73)
+    ![hr-employees](https://github.com/user-attachments/assets/2b222444-beee-42a3-885a-b5427396de73)
 
 [docker]: https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white
 [docker-url]: https://docs.docker.com/engine/install/
